@@ -1,0 +1,63 @@
+name: Deploy to Oracle VPS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set image name
+        id: image
+        run: |
+          image_name="ghcr.io/${GITHUB_REPOSITORY,,}/app"
+          echo "IMAGE_NAME=$image_name" >> "$GITHUB_ENV"
+          echo "name=$image_name" >> "$GITHUB_OUTPUT"
+
+      - name: Build image
+        run: |
+          docker build \
+            --tag "$IMAGE_NAME:latest" \
+            --tag "$IMAGE_NAME:${{ github.sha }}" \
+            .
+
+      - name: Push image
+        run: |
+          docker push "$IMAGE_NAME:latest"
+          docker push "$IMAGE_NAME:${{ github.sha }}"
+
+      - name: Deploy on Oracle VPS
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+            cd /opt/minha-app
+            cat > .env <<'ENV'
+            APP_IMAGE=${{ steps.image.outputs.name }}:latest
+            CADDY_SITE_ADDRESS=${{ vars.CADDY_SITE_ADDRESS || ':80' }}
+            ENV
+            echo '${{ github.token }}' | docker login ghcr.io -u '${{ github.actor }}' --password-stdin
+            docker compose pull
+            docker compose up -d
+            docker image prune -f
