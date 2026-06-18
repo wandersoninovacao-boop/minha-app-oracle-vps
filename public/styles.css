@@ -125,7 +125,7 @@ header {
   grid-column: 1 / -1;
   font-size: 0.95rem;
 }
-.loading::after {
+.loading-spinner::after {
   content: "";
   display: inline-block;
   width: 20px;
@@ -138,6 +138,47 @@ header {
   vertical-align: middle;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* ===== Skeleton ===== */
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skeleton {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  pointer-events: none;
+}
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 37%, #e5e7eb 63%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+.skeleton-img {
+  height: 180px;
+  width: 100%;
+}
+.skeleton-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.skeleton-line {
+  height: 12px;
+  border-radius: 6px;
+  width: 100%;
+}
+.skeleton-line-sm { width: 40%; }
+.skeleton-line-md { width: 70%; }
+.skeleton-line-lg { width: 90%; height: 14px; }
+.skeleton-btn {
+  height: 40px;
+  border-radius: 10px;
+  width: 100%;
+  margin-top: 4px;
+}
 
 /* ===== Card ===== */
 .card {
