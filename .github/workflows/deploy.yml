@@ -131,6 +131,9 @@ jobs:
             SHOPEE_TELEGRAM_CHAT_ID=${{ secrets.SHOPEE_TELEGRAM_CHAT_ID }}
             ENV
 
+            # Ensure port 443 is open for HTTPS
+            sudo iptables -C INPUT -p tcp --dport 443 -j ACCEPT 2>/dev/null || sudo iptables -I INPUT -p tcp --dport 443 -j ACCEPT
+            sudo iptables -C INPUT -p tcp --dport 80 -j ACCEPT 2>/dev/null || sudo iptables -I INPUT -p tcp --dport 80 -j ACCEPT
             cd /opt/minha-app
             echo '${{ github.token }}' | docker login ghcr.io -u '${{ github.actor }}' --password-stdin
             docker compose pull
