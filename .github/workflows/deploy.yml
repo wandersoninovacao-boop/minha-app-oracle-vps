@@ -39,6 +39,12 @@ jobs:
           echo "IMAGE_NAME=$image_name" >> "$GITHUB_ENV"
           echo "name=$image_name" >> "$GITHUB_OUTPUT"
 
+      - name: Criar grupo Telegram
+        run: node scripts/create-telegram-group.js
+        env:
+          BOT_TOKEN: ${{ secrets.SHOPEE_TELEGRAM_BOT_TOKEN }}
+          MY_CHAT_ID: ${{ secrets.SHOPEE_TELEGRAM_CHAT_ID }}
+
       - name: Build image
         run: |
           docker build \
