@@ -131,14 +131,23 @@ jobs:
             SHOPEE_TELEGRAM_CHAT_ID=${{ secrets.SHOPEE_TELEGRAM_CHAT_ID }}
             ENV
 
-            # Ensure port 443 is open for HTTPS
-            sudo iptables -C INPUT -p tcp --dport 443 -j ACCEPT 2>/dev/null || sudo iptables -I INPUT -p tcp --dport 443 -j ACCEPT
-            sudo iptables -C INPUT -p tcp --dport 80 -j ACCEPT 2>/dev/null || sudo iptables -I INPUT -p tcp --dport 80 -j ACCEPT
             cd /opt/minha-app
             echo '${{ github.token }}' | docker login ghcr.io -u '${{ github.actor }}' --password-stdin
             docker compose pull
             docker compose up -d
             docker image prune -f
+            # Diagnostic: check if Caddy is listening on 443 inside the VPS
+            echo "=== CHECKING PORTS ==="
+            sudo ss -tlnp | grep -E ':(80|443)\b' || echo "Ports 80/443 not found listening"
+            echo "=== CADDY LOGS ==="
+            docker compose logs caddy --tail=20
+            echo "=== CADDY PS ==="
+            docker compose ps
+
+            # Ensure local iptables allows 80 and 443
+            sudo iptables -C INPUT -p tcp --dport 443 -j ACCEPT 2>/dev/null || sudo iptables -I INPUT -p tcp --dport 443 -j ACCEPT
+            sudo iptables -C INPUT -p tcp --dport 80 -j ACCEPT 2>/dev/null || sudo iptables -I INPUT -p tcp --dport 80 -j ACCEPT
+
             for i in $(seq 1 24); do
               if curl -fsS --max-time 5 http://achadinhos.duckdns.org/health; then
                 echo "Healthcheck OK"
@@ -147,6 +156,7 @@ jobs:
               echo "Aguardando healthcheck... tentativa $i/24"
               sleep 5
             done
+            echo "=== FINAL STATE ==="
             docker compose ps
             docker compose logs --tail=120
             exit 1
