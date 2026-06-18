@@ -39,6 +39,11 @@ jobs:
           echo "IMAGE_NAME=$image_name" >> "$GITHUB_ENV"
           echo "name=$image_name" >> "$GITHUB_OUTPUT"
 
+      - name: Descobrir grupo Telegram
+        run: |
+          UPDATES=$(curl -s "https://api.telegram.org/bot${{ secrets.SHOPEE_TELEGRAM_BOT_TOKEN }}/getUpdates")
+          echo "$UPDATES" | jq -r '.result[] | select(.message.chat.type == "group" or .message.chat.type == "supergroup") | "\(.message.chat.title): \(.message.chat.id)"' | tail -5
+
       - name: Build image
         run: |
           docker build \
