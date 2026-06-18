@@ -60,9 +60,9 @@ jobs:
           script: |
             set -e
 
-            # Write Caddyfile with admin auth (handle preserves /admin prefix)
+            # Write Caddyfile with admin auth + DuckDNS + HTTPS auto
             cat > /opt/minha-app/Caddyfile <<'CADDY'
-            :80 {
+            achadinhos.duckdns.org {
                 handle /admin/* {
                     basicauth {
                         ${{ secrets.CADDY_ADMIN_USER }} ${{ secrets.CADDY_ADMIN_PASSWORD_HASH }}
@@ -137,7 +137,7 @@ jobs:
             docker compose up -d
             docker image prune -f
             for i in $(seq 1 24); do
-              if curl -fsS --max-time 5 http://127.0.0.1/health; then
+              if curl -fsS --max-time 5 http://achadinhos.duckdns.org/health; then
                 echo "Healthcheck OK"
                 exit 0
               fi
