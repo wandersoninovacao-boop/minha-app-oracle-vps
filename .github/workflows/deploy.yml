@@ -39,6 +39,12 @@ jobs:
           echo "IMAGE_NAME=$image_name" >> "$GITHUB_ENV"
           echo "name=$image_name" >> "$GITHUB_OUTPUT"
 
+      - name: Testar grupo Telegram
+        run: |
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.SHOPEE_TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -H "Content-Type: application/json" \
+            -d '{"chat_id":-5548470538,"text":"🤖 Bot ativo! Ofertas Grupo de 3 em breve.","parse_mode":"HTML"}'
+
       - name: Build image
         run: |
           docker build \
