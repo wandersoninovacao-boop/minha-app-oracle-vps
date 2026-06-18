@@ -13,3 +13,11 @@ URL esperada depois do deploy:
 ```text
 http://147.15.51.149/
 ```
+
+## Trocar pela app real
+
+Leia:
+
+```text
+TROCAR-DEMO-PELA-APP-REAL.md
+```
