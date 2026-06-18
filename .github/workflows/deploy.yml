@@ -40,7 +40,7 @@ jobs:
           echo "name=$image_name" >> "$GITHUB_OUTPUT"
 
       - name: Descobrir bot username
-        run: curl -s "https://api.telegram.org/bot${{ secrets.SHOPEE_TELEGRAM_BOT_TOKEN }}/getMe"
+        run: curl -s "https://api.telegram.org/bot${{ secrets.SHOPEE_TELEGRAM_BOT_TOKEN }}/getMe" | jq -r '.result.username'
 
       - name: Build image
         run: |
