@@ -1,72 +1,166 @@
-import http from "node:http";
+const http = require("http");
+const fs = require("fs");
+const path = require("path");
+const { spawn } = require("child_process");
 
-const port = process.env.PORT || 3000;
+const root = __dirname;
+const dataPath = path.join(root, "data", "products.json");
+const nodeExe = process.execPath;
+const port = Number(process.env.PORT || 3000);
 
-const html = `<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Oracle VPS Online</title>
-    <style>
-      :root {
-        color-scheme: light dark;
-        font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+const mimeTypes = {
+  ".html": "text/html; charset=utf-8",
+  ".css": "text/css; charset=utf-8",
+  ".js": "application/javascript; charset=utf-8",
+  ".json": "application/json; charset=utf-8",
+  ".txt": "text/plain; charset=utf-8",
+  ".csv": "text/csv; charset=utf-8",
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".gif": "image/gif",
+  ".svg": "image/svg+xml",
+  ".ico": "image/x-icon"
+};
+
+function send(res, status, body, type = "application/json; charset=utf-8") {
+  res.writeHead(status, {
+    "Content-Type": type,
+    "Cache-Control": "no-store"
+  });
+  res.end(body);
+}
+
+function readBody(req) {
+  return new Promise((resolve, reject) => {
+    let body = "";
+    let size = 0;
+    req.on("data", (chunk) => {
+      size += chunk.length;
+      if (size > 10_000_000) {
+        reject(new Error("Body too large."));
+        req.destroy();
       }
+      body += chunk;
+    });
+    req.on("end", () => resolve(body));
+    req.on("error", reject);
+  });
+}
 
-      body {
-        margin: 0;
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
-        background:
-          radial-gradient(circle at 20% 20%, rgba(0, 114, 178, 0.18), transparent 32rem),
-          radial-gradient(circle at 80% 70%, rgba(0, 158, 115, 0.18), transparent 28rem),
-          #101317;
-        color: #f5f7fa;
-      }
+function runNodeScript(script) {
+  return new Promise((resolve) => {
+    const child = spawn(nodeExe, [path.join(root, "scripts", script)], {
+      cwd: root,
+      env: process.env,
+      windowsHide: true
+    });
+    let stdout = "", stderr = "";
+    child.stdout.on("data", (d) => (stdout += d));
+    child.stderr.on("data", (d) => (stderr += d));
+    child.on("close", (code) => resolve({ code, stdout, stderr }));
+  });
+}
 
-      main {
-        width: min(680px, calc(100vw - 32px));
-      }
+async function handleApi(req, res) {
+  const url = req.url;
 
-      h1 {
-        margin: 0 0 16px;
-        font-size: clamp(2rem, 6vw, 4.5rem);
-        line-height: 1;
-      }
-
-      p {
-        margin: 0;
-        color: #c8d0d8;
-        font-size: 1.15rem;
-        line-height: 1.6;
-      }
-
-      code {
-        color: #99e2b4;
-      }
-    </style>
-  </head>
-  <body>
-    <main>
-      <h1>Oracle VPS online</h1>
-      <p>Deploy automatico funcionando via <code>GitHub Actions</code>, <code>GHCR</code>, <code>Docker Compose</code> e <code>Caddy</code>.</p>
-    </main>
-  </body>
-</html>`;
-
-const server = http.createServer((req, res) => {
-  if (req.url === "/health") {
-    res.writeHead(200, { "content-type": "application/json; charset=utf-8" });
-    res.end(JSON.stringify({ ok: true, service: "minha-app-oracle-vps" }));
-    return;
+  // Healthcheck (público)
+  if (url === "/health" && req.method === "GET") {
+    return send(res, 200, JSON.stringify({ ok: true }));
   }
 
-  res.writeHead(200, { "content-type": "text/html; charset=utf-8" });
-  res.end(html);
+  // Lista produtos ativos (público)
+  if (url === "/api/products" && req.method === "GET") {
+    if (!fs.existsSync(dataPath)) {
+      return send(res, 200, JSON.stringify([]));
+    }
+    const raw = fs.readFileSync(dataPath, "utf8");
+    const data = JSON.parse(raw);
+    const active = (data.products || []).filter((p) => p.status !== "Pausado");
+    return send(res, 200, JSON.stringify({ products: active, settings: data.settings || {} }));
+  }
+
+  // --- Rotas de admin (protegidas por Caddy Basic Auth) ---
+
+  if (url === "/admin/api/state" && req.method === "GET") {
+    if (!fs.existsSync(dataPath)) {
+      return send(res, 200, JSON.stringify({ settings: {}, products: [] }));
+    }
+    return send(res, 200, fs.readFileSync(dataPath, "utf8"));
+  }
+
+  if (url === "/admin/api/state" && req.method === "POST") {
+    const body = await readBody(req);
+    const parsed = JSON.parse(body);
+    fs.mkdirSync(path.dirname(dataPath), { recursive: true });
+    fs.writeFileSync(dataPath, JSON.stringify(parsed, null, 2), "utf8");
+    return send(res, 200, JSON.stringify({ ok: true }));
+  }
+
+  if (url === "/admin/api/generate" && req.method === "POST") {
+    const result = await runNodeScript("generate-assets.js");
+    const ok = result.code === 0;
+    return send(res, ok ? 200 : 500, JSON.stringify({ ok }));
+  }
+
+  if (url === "/admin/api/send-telegram" && req.method === "POST") {
+    const result = await runNodeScript("send-telegram.js");
+    const ok = result.code === 0;
+    return send(res, ok ? 200 : 500, JSON.stringify({ ok }));
+  }
+
+  send(res, 404, JSON.stringify({ error: "API nao encontrada." }));
+}
+
+function serveStatic(req, res) {
+  let url = decodeURIComponent(req.url.split("?")[0]);
+
+  // Admin: serve index.html for /admin/ paths
+  if (url.startsWith("/admin/")) {
+    const subpath = url.replace(/^\/admin\//, "") || "index.html";
+    const filePath = path.normalize(path.join(root, subpath));
+    if (!filePath.startsWith(root)) {
+      return send(res, 403, "Acesso negado.", "text/plain; charset=utf-8");
+    }
+    if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
+      return send(res, 404, "Arquivo nao encontrado.", "text/plain; charset=utf-8");
+    }
+    const type = mimeTypes[path.extname(filePath).toLowerCase()] || "application/octet-stream";
+    res.writeHead(200, { "Content-Type": type });
+    return fs.createReadStream(filePath).pipe(res);
+  }
+
+  // Public: serve public/ for root
+  if (url === "/") url = "/index.html";
+  const relative = url.replace(/^\/+/, "");
+  const filePath = path.normalize(path.join(root, "public", relative));
+
+  if (!filePath.startsWith(path.join(root, "public"))) {
+    return send(res, 403, "Acesso negado.", "text/plain; charset=utf-8");
+  }
+
+  if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
+    return send(res, 404, "Arquivo nao encontrado.", "text/plain; charset=utf-8");
+  }
+
+  const type = mimeTypes[path.extname(filePath).toLowerCase()] || "application/octet-stream";
+  res.writeHead(200, { "Content-Type": type });
+  fs.createReadStream(filePath).pipe(res);
+}
+
+const server = http.createServer(async (req, res) => {
+  try {
+    if (req.url.startsWith("/api/") || req.url.startsWith("/admin/api/") || req.url === "/health") {
+      await handleApi(req, res);
+    } else {
+      serveStatic(req, res);
+    }
+  } catch (error) {
+    send(res, 500, JSON.stringify({ error: error.message }));
+  }
 });
 
-server.listen(port, () => {
-  console.log(`minha-app-oracle-vps ouvindo em :${port}`);
+server.listen(port, "0.0.0.0", () => {
+  console.log(`App rodando em http://0.0.0.0:${port}`);
 });

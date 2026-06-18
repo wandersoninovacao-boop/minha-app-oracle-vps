@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel Shopee Afiliados</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">S</div>
+          <div>
+            <strong>Ofertas Automáticas</strong>
+            <span>Shopee Afiliados</span>
+          </div>
+        </div>
+
+        <nav class="nav-list" aria-label="Navegação principal">
+          <button class="nav-item active" data-section="dashboard">
+            <i data-lucide="layout-dashboard"></i>
+            Painel
+          </button>
+          <button class="nav-item" data-section="products">
+            <i data-lucide="package-plus"></i>
+            Produtos
+          </button>
+          <button class="nav-item" data-section="queue">
+            <i data-lucide="calendar-days"></i>
+            Fila
+          </button>
+          <button class="nav-item" data-section="catalog">
+            <i data-lucide="store"></i>
+            Catálogo
+          </button>
+          <button class="nav-item" data-section="automation">
+            <i data-lucide="bot"></i>
+            Automação
+          </button>
+          <button class="nav-item" data-section="settings">
+            <i data-lucide="settings"></i>
+            Configuração
+          </button>
+        </nav>
+
+        <div class="rule-box">
+          <strong>Regra de ouro</strong>
+          <span>Automatize organização e textos. Publique com controle para proteger sua conta.</span>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Operação de afiliado</p>
+            <h1 id="pageTitle">Painel</h1>
+          </div>
+          <div class="top-actions">
+            <button class="icon-button" id="exportJsonButton" title="Exportar backup JSON">
+              <i data-lucide="download"></i>
+            </button>
+            <button class="icon-button" id="importJsonButton" title="Importar backup JSON">
+              <i data-lucide="upload"></i>
+            </button>
+            <button class="primary-button" data-section-jump="products">
+              <i data-lucide="plus"></i>
+              Novo produto
+            </button>
+          </div>
+        </header>
+
+        <section class="section active" id="dashboard">
+          <div class="metrics-grid">
+            <article class="metric">
+              <span>Produtos</span>
+              <strong id="metricProducts">0</strong>
+            </article>
+            <article class="metric">
+              <span>Prontos para postar</span>
+              <strong id="metricReady">0</strong>
+            </article>
+            <article class="metric">
+              <span>Publicados</span>
+              <strong id="metricPosted">0</strong>
+            </article>
+            <article class="metric">
+              <span>Comissão prevista</span>
+              <strong id="metricCommission">R$ 0,00</strong>
+            </article>
+          </div>
+
+          <div class="panel-grid">
+            <section class="panel">
+              <div class="panel-header">
+                <h2>Plano de hoje</h2>
+                <button class="ghost-button" id="buildTodayButton">
+                  <i data-lucide="sparkles"></i>
+                  Montar fila
+                </button>
+              </div>
+              <div class="stack" id="todayList"></div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-header">
+                <h2>Recomendações</h2>
+              </div>
+              <ul class="check-list">
+                <li>Comece com produtos abaixo de R$ 50 e compra por impulso.</li>
+                <li>Use 3 a 5 posts por dia, variando categoria e texto.</li>
+                <li>Priorize WhatsApp Status, Telegram e Reels curtos.</li>
+                <li>Evite promessa exagerada e postagem repetida em massa.</li>
+                <li>Teste 10 produtos por semana e mantenha só os que convertem.</li>
+              </ul>
+            </section>
+          </div>
+        </section>
+
+        <section class="section" id="products">
+          <div class="work-grid">
+            <form class="panel form-panel" id="productForm">
+              <div class="panel-header">
+                <h2>Cadastrar produto</h2>
+              </div>
+
+              <label>
+                Nome do produto
+                <input id="productName" required placeholder="Ex: Mini processador elétrico" />
+              </label>
+
+              <div class="two-cols">
+                <label>
+                  Preço
+                  <input id="productPrice" inputmode="decimal" placeholder="39,90" />
+                </label>
+                <label>
+                  Comissão estimada
+                  <input id="productCommission" inputmode="decimal" placeholder="4,50" />
+                </label>
+              </div>
+
+              <div class="two-cols">
+                <label>
+                  Plataforma
+                  <select id="productPlatform">
+                <option>Shopee</option>
+                <option>Mercado Livre</option>
+                <option>Magalu</option>
+                <option>Amazon</option>
+                <option>AliExpress</option>
+                <option>Temu</option>
+              </select>
+                </label>
+                <label>
+                  Categoria
+                  <select id="productCategory">
+                    <option>Casa e cozinha</option>
+                    <option>Beleza</option>
+                    <option>Eletrônicos baratos</option>
+                    <option>Acessórios para celular</option>
+                    <option>Ferramentas úteis</option>
+                    <option>Organização</option>
+                    <option>Produto viral</option>
+                  </select>
+                </label>
+                <label>
+                  Prioridade
+                  <select id="productPriority">
+                    <option value="Alta">Alta</option>
+                    <option value="Média">Média</option>
+                    <option value="Baixa">Baixa</option>
+                  </select>
+                </label>
+              </div>
+
+              <label>
+                Link de afiliado
+                <input id="productAffiliate" required placeholder="Cole seu link de afiliado" />
+              </label>
+
+              <label>
+                Imagem do produto
+                <input id="productImage" placeholder="URL da imagem, opcional" />
+              </label>
+
+              <label>
+                Benefício principal
+                <textarea id="productBenefit" rows="3" placeholder="Ex: facilita cortar alho, cebola e temperos sem sujeira"></textarea>
+              </label>
+
+              <button class="primary-button wide" type="submit">
+                <i data-lucide="wand-2"></i>
+                Salvar e gerar textos
+              </button>
+            </form>
+
+            <section class="panel">
+              <div class="panel-header">
+                <h2>Produtos cadastrados</h2>
+                <div class="compact-actions">
+                  <button class="icon-button" id="exportCsvButton" title="Exportar CSV">
+                    <i data-lucide="sheet"></i>
+                  </button>
+                  <button class="icon-button danger" id="clearButton" title="Limpar todos">
+                    <i data-lucide="trash-2"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="filters">
+                <input id="searchInput" placeholder="Buscar produto ou categoria" />
+                <select id="statusFilter">
+                  <option value="Todos">Todos</option>
+                  <option value="Pronto">Pronto</option>
+                  <option value="Postado">Postado</option>
+                  <option value="Pausado">Pausado</option>
+                </select>
+              </div>
+              <div class="product-list" id="productList"></div>
+            </section>
+          </div>
+
+          <section class="panel bulk-panel">
+            <div class="panel-header">
+              <h2>Importar produtos em lote</h2>
+              <button class="ghost-button" id="loadExampleButton" type="button">
+                <i data-lucide="list-plus"></i>
+                Exemplo
+              </button>
+            </div>
+            <p class="helper-text">Cole um produto por linha no formato: plataforma; nome; preco; comissao; categoria; prioridade; link afiliado; imagem; beneficio</p>
+            <textarea id="bulkInput" rows="7" placeholder="Mercado Livre; Fone Bluetooth; 49,90; 3,00; Eletrônicos baratos; Alta; https://mercadolivre.com/...; https://imagem.jpg; bom para usar no dia a dia"></textarea>
+            <button class="primary-button" id="importBulkButton" type="button">
+              <i data-lucide="upload"></i>
+              Importar lote e gerar textos
+            </button>
+          </section>
+        </section>
+
+        <section class="section" id="queue">
+          <section class="panel">
+            <div class="panel-header">
+              <h2>Fila de postagem</h2>
+              <div class="compact-actions">
+                <button class="ghost-button" id="copyQueueButton">
+                  <i data-lucide="copy"></i>
+                  Copiar hoje
+                </button>
+                <button class="ghost-button" id="copyWeekButton">
+                  <i data-lucide="calendar-range"></i>
+                  Copiar semana
+                </button>
+              </div>
+            </div>
+            <div class="queue-grid" id="queueList"></div>
+          </section>
+
+          <section class="panel week-panel">
+            <div class="panel-header">
+              <h2>Agenda semanal automática</h2>
+            </div>
+            <div class="week-grid" id="weekPlan"></div>
+          </section>
+        </section>
+
+        <section class="section" id="catalog">
+          <section class="panel">
+            <div class="panel-header">
+              <h2>Catálogo de ofertas</h2>
+              <div class="compact-actions">
+                <button class="ghost-button" id="copyCatalogButton">
+                  <i data-lucide="copy"></i>
+                  Copiar texto
+                </button>
+                <button class="ghost-button" id="exportCatalogButton">
+                  <i data-lucide="globe"></i>
+                  Baixar vitrine HTML
+                </button>
+              </div>
+            </div>
+            <div class="catalog-preview" id="catalogPreview"></div>
+          </section>
+        </section>
+
+        <section class="section" id="automation">
+          <div class="panel-grid">
+            <section class="panel">
+              <div class="panel-header">
+                <h2>Robô local</h2>
+              </div>
+              <ol class="automation-steps">
+                <li>Cadastre ou importe seus produtos no painel.</li>
+                <li>Baixe o arquivo da automação e coloque como <strong>data/products.json</strong>.</li>
+                <li>Rode <strong>scripts/run-daily.ps1</strong> para gerar posts, CSV e vitrine.</li>
+                <li>Configure Telegram somente quando quiser envio automático.</li>
+              </ol>
+              <div class="action-row">
+                <button class="primary-button" id="exportAutomationButton">
+                  <i data-lucide="file-json"></i>
+                  Baixar products.json
+                </button>
+                <button class="ghost-button" id="downloadTodayButton">
+                  <i data-lucide="file-text"></i>
+                  Baixar posts de hoje
+                </button>
+                <button class="ghost-button" id="downloadWeekButton">
+                  <i data-lucide="calendar-range"></i>
+                  Baixar semana
+                </button>
+                <button class="ghost-button" id="saveRobotButton">
+                  <i data-lucide="hard-drive"></i>
+                  Salvar no robô
+                </button>
+                <button class="ghost-button" id="generateRobotButton">
+                  <i data-lucide="play"></i>
+                  Gerar agora
+                </button>
+                <button class="ghost-button" id="sendTelegramButton">
+                  <i data-lucide="send"></i>
+                  Enviar Telegram
+                </button>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-header">
+                <h2>Arquivos gerados</h2>
+              </div>
+              <div class="file-list">
+                <div><strong>out/posts-hoje.txt</strong><span>Texto diário para Telegram/WhatsApp.</span></div>
+                <div><strong>out/posts-semana.txt</strong><span>Agenda semanal completa.</span></div>
+                <div><strong>out/vitrine.html</strong><span>Página de catálogo pronta.</span></div>
+                <div><strong>out/catalogo.csv</strong><span>Planilha simples dos produtos.</span></div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="section" id="settings">
+          <section class="panel settings-panel">
+            <div class="panel-header">
+              <h2>Configuração da marca</h2>
+            </div>
+            <label>
+              Nome da sua loja/canal
+              <input id="brandName" />
+            </label>
+            <label>
+              Tom dos anúncios
+              <select id="brandTone">
+                <option>Direto e popular</option>
+                <option>Mais elegante</option>
+                <option>Urgente de promoção</option>
+                <option>Divertido</option>
+              </select>
+            </label>
+            <label>
+              Chamada padrão
+              <textarea id="brandCall" rows="3"></textarea>
+            </label>
+            <button class="primary-button wide" id="saveSettingsButton">
+              <i data-lucide="save"></i>
+              Salvar configuração
+            </button>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <input type="file" id="backupInput" accept="application/json" hidden />
+    <div class="toast" id="toast"></div>
+    <script src="app.js"></script>
+  </body>
+</html>

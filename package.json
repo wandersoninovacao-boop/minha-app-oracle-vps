@@ -2,8 +2,11 @@
   "name": "minha-app-oracle-vps",
   "version": "1.0.0",
   "private": true,
-  "type": "module",
+
   "scripts": {
     "start": "node server.js"
+  },
+  "dependencies": {
+    "puppeteer-core": "^25.1.0"
   }
 }

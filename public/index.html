@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Achadinhos Ofertas Brasil</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #f5f5f5;
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    background: linear-gradient(135deg, #ee4d2d, #ff7337);
+    color: #fff;
+    padding: 16px 24px;
+    text-align: center;
+  }
+  header h1 { font-size: 1.5rem; font-weight: 700; }
+  header p { font-size: 0.85rem; opacity: 0.9; margin-top: 4px; }
+  .controls {
+    max-width: 1200px;
+    margin: 16px auto;
+    padding: 0 16px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .controls input {
+    flex: 1;
+    min-width: 200px;
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    outline: none;
+  }
+  .controls input:focus { border-color: #ee4d2d; }
+  .filter-group {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 8px 14px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.15s;
+  }
+  .filter-btn:hover { border-color: #ee4d2d; color: #ee4d2d; }
+  .filter-btn.active { background: #ee4d2d; color: #fff; border-color: #ee4d2d; }
+  .grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    flex: 1;
+  }
+  .card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    transition: transform 0.15s, box-shadow 0.15s;
+    display: flex;
+    flex-direction: column;
+  }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+  .card-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #bbb;
+    font-size: 0.85rem;
+  }
+  .card-body { padding: 14px; flex: 1; display: flex; flex-direction: column; }
+  .card-platform {
+    font-size: 0.75rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .card-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 8px;
+    flex: 1;
+  }
+  .card-price {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #ee4d2d;
+    margin-bottom: 10px;
+  }
+  .card-link {
+    display: block;
+    text-align: center;
+    padding: 10px;
+    background: #ee4d2d;
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background 0.15s;
+  }
+  .card-link:hover { background: #d43b1e; }
+  .empty { text-align: center; padding: 60px 20px; color: #888; grid-column: 1 / -1; }
+  footer {
+    text-align: center;
+    padding: 20px;
+    color: #888;
+    font-size: 0.8rem;
+    border-top: 1px solid #eee;
+  }
+  .loading { text-align: center; padding: 60px 20px; color: #888; grid-column: 1 / -1; }
+</style>
+</head>
+<body>
+<header>
+  <h1 id="brandName">Achadinhos Ofertas Brasil</h1>
+  <p>Ofertas selecionadas todo dia — clique e confira</p>
+</header>
+
+<div class="controls">
+  <input type="text" id="searchInput" placeholder="Buscar produto..." />
+  <div class="filter-group" id="filterGroup">
+    <button class="filter-btn active" data-platform="">Todas</button>
+  </div>
+</div>
+
+<div class="grid" id="productGrid">
+  <div class="loading">Carregando ofertas...</div>
+</div>
+
+<footer>
+  Os preços e a disponibilidade dos produtos podem variar. Clique para ver a oferta atualizada.
+</footer>
+
+<script>
+const PLATFORM_COLORS = {
+  "Shopee": "#ee4d2d",
+  "Mercado Livre": "#ffe600",
+  "Magalu": "#00a1e0",
+  "Amazon": "#ff9900",
+  "AliExpress": "#e62e04",
+  "Temu": "#e60012"
+};
+
+let allProducts = [];
+let searchTerm = "";
+let activePlatform = "";
+
+async function loadProducts() {
+  try {
+    const res = await fetch("/api/products");
+    const data = await res.json();
+    if (data.settings && data.settings.brandName) {
+      document.getElementById("brandName").textContent = data.settings.brandName;
+    }
+    allProducts = data.products || [];
+    renderFilters();
+    renderGrid();
+  } catch (err) {
+    document.getElementById("productGrid").innerHTML = '<div class="empty">Erro ao carregar ofertas.</div>';
+  }
+}
+
+function renderFilters() {
+  const container = document.getElementById("filterGroup");
+  container.innerHTML = '<button class="filter-btn active" data-platform="">Todas</button>';
+  container.querySelector("[data-platform='']").addEventListener("click", () => setPlatform(""));
+  const seen = new Set();
+  for (const p of allProducts) {
+    if (p.platform && !seen.has(p.platform)) {
+      seen.add(p.platform);
+      const btn = document.createElement("button");
+      btn.className = "filter-btn";
+      btn.dataset.platform = p.platform;
+      btn.textContent = p.platform;
+      btn.addEventListener("click", () => setPlatform(p.platform));
+      container.appendChild(btn);
+    }
+  }
+}
+
+function setPlatform(platform) {
+  activePlatform = platform;
+  document.querySelectorAll(".filter-btn").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.platform === platform);
+  });
+  renderGrid();
+}
+
+function renderGrid() {
+  const grid = document.getElementById("productGrid");
+  let filtered = allProducts;
+  if (searchTerm) {
+    const term = searchTerm.toLowerCase();
+    filtered = filtered.filter((p) => p.name && p.name.toLowerCase().includes(term));
+  }
+  if (activePlatform) {
+    filtered = filtered.filter((p) => p.platform === activePlatform);
+  }
+  filtered.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div class="empty">Nenhuma oferta encontrada.</div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map((p) => {
+    const platformColor = PLATFORM_COLORS[p.platform] || "#888";
+    return `<div class="card">
+      ${p.image
+        ? `<img class="card-img" src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.style.display='none'"/>`
+        : `<div class="card-img">Sem imagem</div>`}
+      <div class="card-body">
+        <div class="card-platform" style="color:${platformColor}">${p.platform || ""}</div>
+        <div class="card-name">${p.name || "Produto"}</div>
+        ${p.price ? `<div class="card-price">${p.price}</div>` : ""}
+        <a class="card-link" href="${p.affiliateLink || "#"}" target="_blank" rel="noopener">Ver oferta</a>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+document.getElementById("searchInput").addEventListener("input", (e) => {
+  searchTerm = e.target.value;
+  renderGrid();
+});
+
+loadProducts();
+</script>
+</body>
+</html>

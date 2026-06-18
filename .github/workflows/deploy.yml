@@ -59,11 +59,78 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             set -e
-            cd /opt/minha-app
-            cat > .env <<'ENV'
+
+            # Write Caddyfile with admin auth (handle preserves /admin prefix)
+            cat > /opt/minha-app/Caddyfile <<'CADDY'
+            :80 {
+                handle /admin/* {
+                    basicauth {
+                        ${{ secrets.CADDY_ADMIN_USER }} ${{ secrets.CADDY_ADMIN_PASSWORD_HASH }}
+                    }
+                    reverse_proxy app:3000
+                }
+
+                handle /api/products {
+                    reverse_proxy app:3000
+                }
+
+                handle /health {
+                    reverse_proxy app:3000
+                }
+
+                handle /* {
+                    reverse_proxy app:3000
+                }
+            }
+            CADDY
+
+            # Write docker-compose with admin auth vars
+            cat > /opt/minha-app/docker-compose.yml <<'COMPOSE'
+            services:
+              app:
+                image: ${{ steps.image.outputs.name }}:latest
+                ports:
+                  - "127.0.0.1:3000:3000"
+                restart: unless-stopped
+                environment:
+                  - PORT=3000
+                  - SHOPEE_TELEGRAM_BOT_TOKEN=${SHOPEE_TELEGRAM_BOT_TOKEN}
+                  - SHOPEE_TELEGRAM_CHAT_ID=${SHOPEE_TELEGRAM_CHAT_ID}
+                volumes:
+                  - app_data:/app/data
+                networks:
+                  - caddy
+
+              caddy:
+                image: caddy:alpine
+                ports:
+                  - "80:80"
+                  - "443:443"
+                restart: unless-stopped
+                volumes:
+                  - /opt/minha-app/Caddyfile:/etc/caddy/Caddyfile
+                  - caddy_data:/data
+                  - caddy_config:/config
+                networks:
+                  - caddy
+
+            volumes:
+              app_data:
+              caddy_data:
+              caddy_config:
+
+            networks:
+              caddy:
+                driver: bridge
+            COMPOSE
+
+            # Write .env with secrets
+            cat > /opt/minha-app/.env <<'ENV'
             APP_IMAGE=${{ steps.image.outputs.name }}:latest
-            CADDY_SITE_ADDRESS=${{ vars.CADDY_SITE_ADDRESS || ':80' }}
+            SHOPEE_TELEGRAM_BOT_TOKEN=${{ secrets.SHOPEE_TELEGRAM_BOT_TOKEN }}
+            SHOPEE_TELEGRAM_CHAT_ID=${{ secrets.SHOPEE_TELEGRAM_CHAT_ID }}
             ENV
+
             echo '${{ github.token }}' | docker login ghcr.io -u '${{ github.actor }}' --password-stdin
             docker compose pull
             docker compose up -d
