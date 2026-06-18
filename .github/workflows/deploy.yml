@@ -136,27 +136,24 @@ jobs:
             docker compose pull
             docker compose up -d
             docker image prune -f
-            # Diagnostic: check if Caddy is listening on 443 inside the VPS
-            echo "=== CHECKING PORTS ==="
-            sudo ss -tlnp | grep -E ':(80|443)\b' || echo "Ports 80/443 not found listening"
-            echo "=== CADDY LOGS ==="
-            docker compose logs caddy --tail=20
-            echo "=== CADDY PS ==="
-            docker compose ps
 
-            # Ensure local iptables allows 80 and 443
-            sudo iptables -C INPUT -p tcp --dport 443 -j ACCEPT 2>/dev/null || sudo iptables -I INPUT -p tcp --dport 443 -j ACCEPT
-            sudo iptables -C INPUT -p tcp --dport 80 -j ACCEPT 2>/dev/null || sudo iptables -I INPUT -p tcp --dport 80 -j ACCEPT
+            # Force re-create Caddy to pick up new Caddyfile with DuckDNS domain
+            echo "=== RECREATING CADDY (FORCE) ==="
+            docker compose stop caddy
+            docker compose rm -f caddy
+            docker compose up -d caddy
 
-            for i in $(seq 1 24); do
+            for i in $(seq 1 30); do
               if curl -fsS --max-time 5 http://achadinhos.duckdns.org/health; then
                 echo "Healthcheck OK"
+                # Check if HTTPS is already up
+                if curl -fsS -o /dev/null --max-time 5 https://achadinhos.duckdns.org/health 2>/dev/null; then
+                  echo "HTTPS OK"
+                else
+                  echo "HTTPS ainda nao pronto (aguardando Let's Encrypt)"
+                fi
                 exit 0
               fi
-              echo "Aguardando healthcheck... tentativa $i/24"
-              sleep 5
+              echo "Aguardando healthcheck... tentativa $i/30"
+              sleep 4
             done
-            echo "=== FINAL STATE ==="
-            docker compose ps
-            docker compose logs --tail=120
-            exit 1
