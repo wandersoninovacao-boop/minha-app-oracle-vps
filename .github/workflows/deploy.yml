@@ -64,7 +64,7 @@ jobs:
             cat > /opt/minha-app/Caddyfile <<'CADDY'
             achadinhos.duckdns.org {
                 handle /admin/* {
-                    basicauth {
+                    basic_auth {
                         ${{ secrets.CADDY_ADMIN_USER }} ${{ secrets.CADDY_ADMIN_PASSWORD_HASH }}
                     }
                     reverse_proxy app:3000

@@ -4,7 +4,8 @@
   "private": true,
 
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "aliexpress:grupo3": "node scripts/generate-aliexpress-grupo3.js"
   },
   "dependencies": {
     "puppeteer-core": "^25.1.0"
