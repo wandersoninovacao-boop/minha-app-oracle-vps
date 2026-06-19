@@ -49,7 +49,9 @@ function parseMoney(value) {
 function formatMoney(value) {
   const amount = parseMoney(value);
   if (!amount) return "Conferir preco no site";
-  return amount.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  return amount
+    .toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
+    .replace(/\u00a0/g, " ");
 }
 
 function priorityScore(product) {
