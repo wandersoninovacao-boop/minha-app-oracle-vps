@@ -7,7 +7,9 @@
     "start": "node server.js",
     "aliexpress:grupo3": "node scripts/generate-aliexpress-grupo3.js",
     "catalog:enrich": "node scripts/enrich-products.js",
-    "groups:top5": "node scripts/generate-group-top5.js"
+    "groups:top5": "node scripts/generate-group-top5.js",
+    "groups:check": "node scripts/send-group-top5.js --dry-run",
+    "groups:send": "node scripts/send-group-top5.js"
   },
   "dependencies": {
     "puppeteer-core": "^25.1.0"

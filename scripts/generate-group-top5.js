@@ -92,14 +92,16 @@ function groupTopOffers(products, limitPerPlatform = 5) {
     .sort((a, b) => compareBestOffers(a.products[0], b.products[0]));
 }
 
-function postText(product, index) {
+function postText(product, brandName) {
   const badge = isFlashDeal(product) ? "OFERTA RELAMPAGO" : "MELHOR OFERTA";
   return [
-    `${index}. ${badge}`,
+    brandName,
+    badge,
     product.name || "Produto",
     formatMoney(product.price),
     product.benefit || product.category || "Oferta selecionada.",
-    product.affiliateLink || ""
+    `Oferta no ${product.platform || "site"}: ${product.affiliateLink || ""}`,
+    "Confira preco, frete e disponibilidade antes de comprar."
   ].filter(Boolean).join("\n");
 }
 
@@ -110,7 +112,7 @@ function groupText(group, brandName) {
     "Confira preco, frete e disponibilidade antes de comprar."
   ].join("\n");
 
-  const posts = group.products.map((product, index) => postText(product, index + 1)).join("\n\n");
+  const posts = group.products.map((product) => postText(product, brandName)).join("\n\n");
   return `${header}\n\n${posts}`;
 }
 
@@ -121,8 +123,26 @@ function main() {
 
   fs.mkdirSync(outDir, { recursive: true });
 
+  let sequence = 0;
+  const posts = groups.flatMap((group) => group.products.map((product) => {
+    sequence += 1;
+    return {
+      sequence,
+      productId: product.id,
+      platform: group.platform,
+      name: product.name || "Produto",
+      price: formatMoney(product.price),
+      affiliateLink: product.affiliateLink || "",
+      image: product.image || "",
+      text: postText(product, brandName)
+    };
+  }));
+
   const payload = {
     generatedAt: new Date().toISOString(),
+    mode: "individual",
+    totalPosts: posts.length,
+    posts,
     groups: groups.map((group) => ({
       platform: group.platform,
       count: group.products.length,
@@ -131,14 +151,19 @@ function main() {
     }))
   };
 
-  const text = payload.groups
-    .map((group) => `### ${group.platform}\n\n${group.text}`)
+  const text = payload.posts
+    .map((post) => [
+      `### ANUNCIO ${post.sequence} - ${post.platform}`,
+      `IMAGEM: ${post.image || "SEM IMAGEM"}`,
+      "",
+      post.text
+    ].join("\n"))
     .join("\n\n---\n\n");
 
   fs.writeFileSync(path.join(outDir, "grupos-top5.json"), JSON.stringify(payload, null, 2), "utf8");
   fs.writeFileSync(path.join(outDir, "grupos-top5.txt"), text || "Sem ofertas ativas para grupos.", "utf8");
 
-  console.log(`Grupos gerados: ${payload.groups.length}`);
+  console.log(`Anuncios individuais gerados: ${payload.totalPosts}`);
   for (const group of payload.groups) {
     console.log(`- ${group.platform}: ${group.count}`);
   }
