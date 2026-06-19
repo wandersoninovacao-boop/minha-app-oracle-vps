@@ -3,79 +3,126 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Achadinhos Ofertas Brasil — ofertas selecionadas todo dia das melhores plataformas.">
+<meta name="description" content="Achadinhos Ofertas Brasil: ofertas selecionadas das principais plataformas, atualizadas todos os dias.">
 <title>Achadinhos Ofertas Brasil</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230f172a'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='Arial' font-size='34' font-weight='800' fill='white'%3EA%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
 
-<header>
-  <div class="header-left">
-    <div class="logo">achadinhos<span>Oficial</span></div>
-    <div class="tagline">Ofertas selecionadas todo dia</div>
-  </div>
+<header class="site-header">
+  <a class="brand" href="/" aria-label="Achadinhos Ofertas Brasil">
+    <span class="brand-mark">A</span>
+    <span class="brand-text">
+      <strong>Achadinhos</strong>
+      <small>Ofertas Brasil</small>
+    </span>
+  </a>
+  <nav class="top-nav" aria-label="Navegacao principal">
+    <a href="#ofertas">Ofertas</a>
+    <a href="#categorias">Categorias</a>
+    <a href="#aviso">Aviso</a>
+  </nav>
 </header>
 
-<section class="hero">
-  <h2>🔥 Ofertas que valem a pena</h2>
-  <p>Selecionamos os melhores achados para você economizar. Clique e confira!</p>
-</section>
+<main>
+  <section class="hero" aria-labelledby="heroTitle">
+    <div class="hero-content">
+      <p class="eyebrow">Curadoria diaria de ofertas</p>
+      <h1 id="heroTitle">Achadinhos Ofertas Brasil</h1>
+      <p class="hero-copy">Produtos escolhidos para economizar tempo na busca e encontrar bons achados em marketplaces confiaveis.</p>
+      <div class="hero-actions">
+        <a class="primary-link" href="#ofertas">Ver ofertas</a>
+        <a class="secondary-link" href="#categorias">Filtrar loja</a>
+      </div>
+    </div>
+    <aside class="hero-summary" aria-label="Resumo da vitrine">
+      <div>
+        <span id="summaryProducts">...</span>
+        <small>ofertas ativas</small>
+      </div>
+      <div>
+        <span id="summaryPlatforms">...</span>
+        <small>lojas monitoradas</small>
+      </div>
+      <div>
+        <span>24h</span>
+        <small>curadoria recente</small>
+      </div>
+    </aside>
+  </section>
 
-<div class="controls">
-  <div class="search-wrapper">
-    <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    <input type="text" id="searchInput" placeholder="Buscar produto..." autocomplete="off" />
-  </div>
-  <div class="tabs" id="tabsContainer"></div>
-</div>
+  <section class="trust-strip" aria-label="Destaques da curadoria">
+    <div>
+      <strong>Links diretos</strong>
+      <span>Voce confere preco e frete no site da loja.</span>
+    </div>
+    <div>
+      <strong>Selecao manual</strong>
+      <span>Itens organizados por plataforma e relevancia.</span>
+    </div>
+    <div>
+      <strong>Ofertas atualizadas</strong>
+      <span>Catalogo leve, rapido e pronto para compartilhar.</span>
+    </div>
+  </section>
 
-<div class="grid" id="productGrid">
-  <div class="skeleton">
-    <div class="skeleton-img skeleton-shimmer"></div>
-    <div class="skeleton-body">
-      <div class="skeleton-line skeleton-line-sm skeleton-shimmer"></div>
-      <div class="skeleton-line skeleton-line-lg skeleton-shimmer"></div>
-      <div class="skeleton-line skeleton-line-md skeleton-shimmer"></div>
-      <div class="skeleton-line skeleton-line-md skeleton-shimmer"></div>
-      <div class="skeleton-btn skeleton-shimmer"></div>
+  <section class="catalog-shell" id="ofertas">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Vitrine</p>
+        <h2>Ofertas em destaque</h2>
+      </div>
+      <span id="resultCount">Carregando ofertas...</span>
     </div>
-  </div>
-  <div class="skeleton">
-    <div class="skeleton-img skeleton-shimmer"></div>
-    <div class="skeleton-body">
-      <div class="skeleton-line skeleton-line-sm skeleton-shimmer"></div>
-      <div class="skeleton-line skeleton-line-lg skeleton-shimmer"></div>
-      <div class="skeleton-line skeleton-line-md skeleton-shimmer"></div>
-      <div class="skeleton-line skeleton-line-md skeleton-shimmer"></div>
-      <div class="skeleton-btn skeleton-shimmer"></div>
+
+    <div class="controls" id="categorias">
+      <label class="search-wrapper" for="searchInput">
+        <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="searchInput" placeholder="Buscar produto, categoria ou loja" autocomplete="off">
+      </label>
+      <div class="tabs" id="tabsContainer" aria-label="Filtrar por plataforma"></div>
     </div>
-  </div>
-  <div class="skeleton">
-    <div class="skeleton-img skeleton-shimmer"></div>
-    <div class="skeleton-body">
-      <div class="skeleton-line skeleton-line-sm skeleton-shimmer"></div>
-      <div class="skeleton-line skeleton-line-lg skeleton-shimmer"></div>
-      <div class="skeleton-line skeleton-line-md skeleton-shimmer"></div>
-      <div class="skeleton-line skeleton-line-md skeleton-shimmer"></div>
-      <div class="skeleton-btn skeleton-shimmer"></div>
+
+    <div class="grid" id="productGrid">
+      <div class="skeleton">
+        <div class="skeleton-img skeleton-shimmer"></div>
+        <div class="skeleton-body">
+          <div class="skeleton-line skeleton-line-sm skeleton-shimmer"></div>
+          <div class="skeleton-line skeleton-line-lg skeleton-shimmer"></div>
+          <div class="skeleton-line skeleton-line-md skeleton-shimmer"></div>
+          <div class="skeleton-btn skeleton-shimmer"></div>
+        </div>
+      </div>
+      <div class="skeleton">
+        <div class="skeleton-img skeleton-shimmer"></div>
+        <div class="skeleton-body">
+          <div class="skeleton-line skeleton-line-sm skeleton-shimmer"></div>
+          <div class="skeleton-line skeleton-line-lg skeleton-shimmer"></div>
+          <div class="skeleton-line skeleton-line-md skeleton-shimmer"></div>
+          <div class="skeleton-btn skeleton-shimmer"></div>
+        </div>
+      </div>
+      <div class="skeleton">
+        <div class="skeleton-img skeleton-shimmer"></div>
+        <div class="skeleton-body">
+          <div class="skeleton-line skeleton-line-sm skeleton-shimmer"></div>
+          <div class="skeleton-line skeleton-line-lg skeleton-shimmer"></div>
+          <div class="skeleton-line skeleton-line-md skeleton-shimmer"></div>
+          <div class="skeleton-btn skeleton-shimmer"></div>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="skeleton">
-    <div class="skeleton-img skeleton-shimmer"></div>
-    <div class="skeleton-body">
-      <div class="skeleton-line skeleton-line-sm skeleton-shimmer"></div>
-      <div class="skeleton-line skeleton-line-lg skeleton-shimmer"></div>
-      <div class="skeleton-line skeleton-line-md skeleton-shimmer"></div>
-      <div class="skeleton-line skeleton-line-md skeleton-shimmer"></div>
-      <div class="skeleton-btn skeleton-shimmer"></div>
-    </div>
-  </div>
-</div>
+  </section>
+</main>
 
 <div class="modal-overlay" id="modalOverlay">
-  <div class="modal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalName">
     <button class="modal-close" id="modalClose" aria-label="Fechar">&times;</button>
-    <img class="modal-img" id="modalImg" src="" alt="" />
+    <div class="modal-media" id="modalMedia">
+      <img class="modal-img" id="modalImg" src="" alt="">
+      <div class="modal-fallback" id="modalFallback"></div>
+    </div>
     <div class="modal-body">
       <div class="modal-platform" id="modalPlatform"></div>
       <div class="modal-name" id="modalName"></div>
@@ -83,7 +130,7 @@
       <div class="modal-price" id="modalPrice"></div>
       <div class="modal-actions">
         <a class="modal-btn modal-btn-primary" id="modalLink" target="_blank" rel="noopener">Ver oferta</a>
-        <button class="modal-btn modal-btn-secondary" id="modalShare">Compartilhar</button>
+        <button class="modal-btn modal-btn-secondary" id="modalShare">Copiar link</button>
       </div>
     </div>
   </div>
@@ -91,26 +138,27 @@
 
 <div class="toast" id="toast"></div>
 
-<footer>
-  Os preços e a disponibilidade dos produtos podem variar. Clique para ver a oferta atualizada.
+<footer id="aviso">
+  <strong>Achadinhos Ofertas Brasil</strong>
+  <span>Precos, frete e disponibilidade podem mudar. Confira as condicoes no site da loja antes de comprar.</span>
 </footer>
 
 <script>
 const PLATFORM_COLORS = {
   "Shopee": "#ee4d2d",
-  "Mercado Livre": "#ffe600",
-  "Magalu": "#00a1e0",
-  "Amazon": "#ff9900",
-  "AliExpress": "#e62e04",
-  "Temu": "#e60012"
+  "Mercado Livre": "#a78100",
+  "Magalu": "#0077b6",
+  "Amazon": "#b86600",
+  "AliExpress": "#d83213",
+  "Temu": "#d9001b"
 };
 const PLATFORM_GRADIENTS = {
-  "Shopee": "linear-gradient(135deg, #ee4d2d, #ff7337)",
-  "Mercado Livre": "linear-gradient(135deg, #ffe600, #ffb300)",
-  "Magalu": "linear-gradient(135deg, #00a1e0, #00c4ff)",
-  "Amazon": "linear-gradient(135deg, #ff9900, #ffad33)",
-  "AliExpress": "linear-gradient(135deg, #e62e04, #ff4d2d)",
-  "Temu": "linear-gradient(135deg, #e60012, #ff3333)"
+  "Shopee": "linear-gradient(135deg, #f15b2a, #9f2e16)",
+  "Mercado Livre": "linear-gradient(135deg, #ffe15a, #c99b00)",
+  "Magalu": "linear-gradient(135deg, #23a7df, #075985)",
+  "Amazon": "linear-gradient(135deg, #ffb13b, #87520b)",
+  "AliExpress": "linear-gradient(135deg, #f05a28, #981b1b)",
+  "Temu": "linear-gradient(135deg, #fb3b37, #8f1115)"
 };
 
 let allProducts = [];
@@ -122,9 +170,13 @@ let searchTimeout = null;
 const grid = document.getElementById("productGrid");
 const searchInput = document.getElementById("searchInput");
 const tabsContainer = document.getElementById("tabsContainer");
+const resultCount = document.getElementById("resultCount");
+const summaryProducts = document.getElementById("summaryProducts");
+const summaryPlatforms = document.getElementById("summaryPlatforms");
 const modalOverlay = document.getElementById("modalOverlay");
 const modalClose = document.getElementById("modalClose");
 const modalImg = document.getElementById("modalImg");
+const modalFallback = document.getElementById("modalFallback");
 const modalPlatform = document.getElementById("modalPlatform");
 const modalName = document.getElementById("modalName");
 const modalBenefit = document.getElementById("modalBenefit");
@@ -138,14 +190,20 @@ async function loadProducts() {
     const res = await fetch("/api/products");
     const data = await res.json();
     allProducts = data.products || [];
-    if (allProducts.length > 0) {
-      document.querySelector(".hero h2").textContent = "\u{1F525} " + (data.settings?.brandName || "Achadinhos Ofertas Brasil");
-    }
+    document.getElementById("heroTitle").textContent = data.settings?.brandName || "Achadinhos Ofertas Brasil";
+    updateSummary();
     renderTabs();
     renderGrid();
   } catch (err) {
-    grid.innerHTML = '<div class="empty">Erro ao carregar ofertas. Tente novamente.</div>';
+    grid.innerHTML = '<div class="empty">Nao foi possivel carregar as ofertas agora.</div>';
+    resultCount.textContent = "Erro ao carregar";
   }
+}
+
+function updateSummary() {
+  const platforms = new Set(allProducts.map((p) => p.platform).filter(Boolean));
+  summaryProducts.textContent = allProducts.length;
+  summaryPlatforms.textContent = platforms.size;
 }
 
 function renderTabs() {
@@ -176,59 +234,83 @@ function setPlatform(platform) {
 function debounceSearch() {
   clearTimeout(searchTimeout);
   searchTimeout = setTimeout(() => {
-    searchTerm = searchInput.value;
+    searchTerm = searchInput.value.trim();
     renderGrid();
-  }, 250);
+  }, 200);
 }
 
 searchInput.addEventListener("input", debounceSearch);
 
 function formatPrice(price) {
   if (!price) return null;
-  const cleaned = price.replace(/[^0-9,.]/g, "");
+  const cleaned = String(price).replace(/[^0-9,.]/g, "");
   if (!cleaned) return null;
-  const num = parseFloat(cleaned.replace(",", "."));
+  const normalized = cleaned.includes(",") ? cleaned.replace(/\./g, "").replace(",", ".") : cleaned;
+  const num = parseFloat(normalized);
   if (isNaN(num)) return price;
   return num.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
 function getInitials(name) {
-  if (!name) return "?";
-  return name.charAt(0).toUpperCase();
+  if (!name) return "OF";
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase();
+}
+
+function productText(product) {
+  return [product.name, product.category, product.platform, product.benefit].join(" ").toLowerCase();
 }
 
 function renderGrid() {
   filteredProducts = allProducts.slice();
   if (searchTerm) {
     const term = searchTerm.toLowerCase();
-    filteredProducts = filteredProducts.filter((p) => p.name && p.name.toLowerCase().includes(term));
+    filteredProducts = filteredProducts.filter((p) => productText(p).includes(term));
   }
   if (activePlatform) {
     filteredProducts = filteredProducts.filter((p) => p.platform === activePlatform);
   }
   filteredProducts.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
 
+  const suffix = filteredProducts.length === 1 ? "oferta encontrada" : "ofertas encontradas";
+  resultCount.textContent = `${filteredProducts.length} ${suffix}`;
+
   if (filteredProducts.length === 0) {
-    grid.innerHTML = '<div class="empty">Nenhuma oferta encontrada.</div>';
+    grid.innerHTML = '<div class="empty">Nenhuma oferta encontrada para este filtro.</div>';
     return;
   }
 
   grid.innerHTML = filteredProducts.map((p, i) => {
-    const color = PLATFORM_COLORS[p.platform] || "#6b7280";
-    const gradient = PLATFORM_GRADIENTS[p.platform] || "linear-gradient(135deg, #e5e7eb, #d1d5db)";
+    const color = PLATFORM_COLORS[p.platform] || "#4b5563";
+    const gradient = PLATFORM_GRADIENTS[p.platform] || "linear-gradient(135deg, #64748b, #1f2937)";
     const fmtPrice = formatPrice(p.price);
+    const benefit = p.benefit || "Oferta selecionada para conferir no site da loja.";
 
-    return `<div class="card" data-index="${i}">
-      ${p.image
-        ? `<img class="card-img" src="${p.image}" alt="${p.name || "Produto"}" loading="lazy" onerror="this.style.display='none'"/>`
-        : `<div class="card-img-placeholder" style="background:${gradient}">${getInitials(p.name)}</div>`}
-      <div class="card-body">
-        <div class="card-platform" style="color:${color}">${p.platform || ""}</div>
-        <div class="card-name">${p.name || "Produto"}</div>
-        ${fmtPrice ? `<div class="card-price">${fmtPrice}</div>` : ""}
-        <button class="card-btn">Ver oferta</button>
+    return `<article class="card" data-index="${i}">
+      <div class="card-media">
+        ${p.image
+          ? `<img class="card-img" src="${p.image}" alt="${p.name || "Produto"}" loading="lazy" onerror="this.parentElement.classList.add('no-image');this.remove();">`
+          : ""}
+        <div class="card-img-placeholder" style="background:${gradient}"><span>${getInitials(p.name)}</span></div>
+        <span class="platform-pill" style="color:${color}">${p.platform || "Oferta"}</span>
       </div>
-    </div>`;
+      <div class="card-body">
+        <div class="card-name">${p.name || "Produto"}</div>
+        <p class="card-benefit">${benefit}</p>
+        <div class="card-footer">
+          <div>
+            <small>${p.category || "Selecionado"}</small>
+            ${fmtPrice ? `<strong>${fmtPrice}</strong>` : `<strong>Conferir preco</strong>`}
+          </div>
+          <button class="card-btn" aria-label="Ver oferta de ${p.name || "produto"}">Ver</button>
+        </div>
+      </div>
+    </article>`;
   }).join("");
 }
 
@@ -241,27 +323,33 @@ grid.addEventListener("click", (e) => {
 });
 
 function openModal(p) {
-  const color = PLATFORM_COLORS[p.platform] || "#6b7280";
+  const color = PLATFORM_COLORS[p.platform] || "#4b5563";
+  const gradient = PLATFORM_GRADIENTS[p.platform] || "linear-gradient(135deg, #64748b, #1f2937)";
   const fmtPrice = formatPrice(p.price);
+
+  modalFallback.textContent = getInitials(p.name);
+  modalFallback.style.background = gradient;
+  modalImg.style.display = "none";
+  modalFallback.style.display = "grid";
 
   if (p.image) {
     modalImg.src = p.image;
-    modalImg.style.display = "block";
-    modalImg.onerror = function() {
-      this.style.display = "none";
+    modalImg.onload = function() {
+      modalImg.style.display = "block";
+      modalFallback.style.display = "none";
     };
-  } else {
-    modalImg.style.display = "none";
+    modalImg.onerror = function() {
+      modalImg.style.display = "none";
+      modalFallback.style.display = "grid";
+    };
   }
-  modalPlatform.textContent = p.platform || "";
+
+  modalPlatform.textContent = p.platform || "Oferta";
   modalPlatform.style.color = color;
   modalName.textContent = p.name || "Produto";
-  modalBenefit.textContent = p.benefit || "";
-  modalBenefit.style.display = p.benefit ? "block" : "none";
-  modalPrice.textContent = fmtPrice || "";
-  modalPrice.style.display = fmtPrice ? "block" : "none";
+  modalBenefit.textContent = p.benefit || "Confira preco, frete e prazo antes de comprar.";
+  modalPrice.textContent = fmtPrice || "Preco no site da loja";
   modalLink.href = p.affiliateLink || "#";
-
   modalShare.dataset.link = p.affiliateLink || window.location.href;
   modalOverlay.classList.add("open");
   document.body.style.overflow = "hidden";
@@ -284,7 +372,7 @@ modalShare.addEventListener("click", async () => {
   const link = modalShare.dataset.link;
   try {
     await navigator.clipboard.writeText(link);
-    showToast("Link copiado!");
+    showToast("Link copiado");
   } catch {
     const textarea = document.createElement("textarea");
     textarea.value = link;
@@ -292,7 +380,7 @@ modalShare.addEventListener("click", async () => {
     textarea.select();
     document.execCommand("copy");
     document.body.removeChild(textarea);
-    showToast("Link copiado!");
+    showToast("Link copiado");
   }
 });
 
