@@ -190,6 +190,106 @@ main {
   line-height: 1.45;
 }
 
+.group-promo {
+  max-width: 1240px;
+  margin: 38px auto 0;
+  display: grid;
+  grid-template-columns: minmax(260px, 0.72fr) minmax(0, 1.28fr);
+  gap: 22px;
+  align-items: stretch;
+  padding: 0 clamp(16px, 3vw, 28px);
+}
+.group-promo-copy {
+  min-height: 100%;
+  display: grid;
+  align-content: center;
+  gap: 12px;
+  padding: 28px;
+  border-radius: 8px;
+  background: #111827;
+  color: #fff;
+  overflow: hidden;
+  position: relative;
+}
+.group-promo-copy::after {
+  content: "";
+  position: absolute;
+  right: -58px;
+  bottom: -78px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: #f97316;
+  opacity: .18;
+}
+.group-promo-copy h2 {
+  max-width: 460px;
+  font-size: clamp(1.55rem, 3vw, 2.25rem);
+  line-height: 1.05;
+  letter-spacing: 0;
+}
+.group-promo-copy p:not(.eyebrow) {
+  max-width: 470px;
+  color: #d9e2ee;
+  line-height: 1.55;
+}
+.group-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.group-card {
+  min-height: 260px;
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid #dde3ea;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 12px 30px rgba(15,23,42,0.07);
+}
+.group-card img {
+  width: 132px;
+  height: 132px;
+  border-radius: 30px;
+  box-shadow: 0 14px 32px rgba(15,23,42,0.16);
+}
+.group-card span {
+  color: #f97316;
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.group-card h3 {
+  margin-top: 7px;
+  color: #111827;
+  font-size: 1.2rem;
+  line-height: 1.18;
+}
+.group-card p {
+  margin-top: 9px;
+  color: #64748b;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.group-button {
+  min-height: 42px;
+  margin-top: 16px;
+  padding: 0 15px;
+  border: 0;
+  border-radius: 8px;
+  background: #111827;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 850;
+}
+.group-button:hover { background: #1f2937; }
+.group-card-ali .group-button { background: #e62e04; }
+.group-card-ali .group-button:hover { background: #c72406; }
+
 .catalog-shell {
   max-width: 1240px;
   margin: 44px auto 0;
@@ -615,6 +715,9 @@ footer strong { color: #111827; }
     margin-right: 16px;
     grid-template-columns: 1fr;
   }
+  .group-promo {
+    grid-template-columns: 1fr;
+  }
   .controls {
     grid-template-columns: 1fr;
   }
@@ -690,6 +793,34 @@ footer strong { color: #111827; }
   .catalog-shell {
     margin-top: 24px;
     padding-bottom: 38px;
+  }
+  .group-promo {
+    margin-top: 24px;
+  }
+  .group-promo-copy {
+    padding: 22px;
+  }
+  .group-cards {
+    grid-template-columns: 1fr;
+  }
+  .group-card {
+    grid-template-columns: 96px minmax(0, 1fr);
+    min-height: 0;
+    padding: 15px;
+  }
+  .group-card img {
+    width: 96px;
+    height: 96px;
+    border-radius: 22px;
+  }
+  .group-card h3 {
+    font-size: 1rem;
+  }
+  .group-card p {
+    font-size: 0.82rem;
+  }
+  .group-button {
+    width: 100%;
   }
   .section-heading {
     align-items: start;

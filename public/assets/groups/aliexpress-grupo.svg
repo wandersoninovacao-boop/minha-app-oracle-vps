@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="900" viewBox="0 0 900 900" role="img" aria-labelledby="title desc">
+  <title id="title">Grupo AliExpress Achadinhos</title>
+  <desc id="desc">Logo para grupo de ofertas AliExpress.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#ff4d2d"/>
+      <stop offset=".55" stop-color="#e62e04"/>
+      <stop offset="1" stop-color="#991b1b"/>
+    </linearGradient>
+    <linearGradient id="bag" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#fff7ed"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="30" stdDeviation="28" flood-color="#450a0a" flood-opacity=".3"/>
+    </filter>
+  </defs>
+  <rect width="900" height="900" rx="210" fill="url(#bg)"/>
+  <circle cx="730" cy="180" r="160" fill="#fff" opacity=".1"/>
+  <circle cx="160" cy="705" r="190" fill="#fff" opacity=".1"/>
+  <g filter="url(#shadow)">
+    <path d="M258 330h384l48 330c6 42-27 80-70 80H280c-43 0-76-38-70-80l48-330Z" fill="url(#bag)"/>
+    <path d="M345 330c0-82 48-142 105-142s105 60 105 142" fill="none" stroke="#fff7ed" stroke-width="40" stroke-linecap="round"/>
+    <path d="M345 330c0-82 48-142 105-142s105 60 105 142" fill="none" stroke="#991b1b" stroke-width="18" stroke-linecap="round" opacity=".36"/>
+    <text x="450" y="524" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="116" font-weight="900" fill="#e62e04">ALI</text>
+    <path d="M318 590h264" stroke="#ff4d2d" stroke-width="28" stroke-linecap="round"/>
+  </g>
+  <text x="450" y="154" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="54" font-weight="900" fill="#fff">ACHADINHOS</text>
+  <text x="450" y="808" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="46" font-weight="900" fill="#fff">ALIEXPRESS</text>
+</svg>

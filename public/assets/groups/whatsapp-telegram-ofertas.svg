@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="900" viewBox="0 0 900 900" role="img" aria-labelledby="title desc">
+  <title id="title">Grupo WhatsApp e Telegram Achadinhos</title>
+  <desc id="desc">Logo para divulgar grupos de ofertas no WhatsApp e Telegram.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#25d366"/>
+      <stop offset=".52" stop-color="#16a34a"/>
+      <stop offset="1" stop-color="#229ed9"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="26" stdDeviation="24" flood-color="#052e16" flood-opacity=".28"/>
+    </filter>
+  </defs>
+  <rect width="900" height="900" rx="210" fill="url(#bg)"/>
+  <circle cx="165" cy="150" r="138" fill="#fff" opacity=".12"/>
+  <circle cx="750" cy="740" r="178" fill="#fff" opacity=".12"/>
+  <g filter="url(#shadow)">
+    <circle cx="342" cy="430" r="178" fill="#fff"/>
+    <path d="M260 525 238 636l108-37a176 176 0 0 0 174-302 176 176 0 0 0-260 228Z" fill="none" stroke="#128c4a" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M287 352c21 90 78 148 172 176 22-11 39-31 49-58l-55-28-32 31c-36-18-63-45-80-82l29-29-29-56c-25 8-43 23-54 46Z" fill="#128c4a"/>
+  </g>
+  <g filter="url(#shadow)">
+    <circle cx="584" cy="466" r="168" fill="#fff"/>
+    <path d="M482 455 678 372 637 574l-69-58-54 52 10-76 116-95-143 78-15-20Z" fill="#229ed9"/>
+  </g>
+  <rect x="172" y="694" width="556" height="86" rx="28" fill="#fff" opacity=".96"/>
+  <text x="450" y="750" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="900" fill="#0f172a">OFERTAS NO GRUPO</text>
+</svg>

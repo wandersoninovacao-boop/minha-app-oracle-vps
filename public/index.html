@@ -20,6 +20,7 @@
   </a>
   <nav class="top-nav" aria-label="Navegacao principal">
     <a href="#ofertas">Ofertas</a>
+    <a href="#grupos">Grupos</a>
     <a href="#categorias">Categorias</a>
     <a href="#aviso">Aviso</a>
   </nav>
@@ -64,6 +65,34 @@
     <div>
       <strong>Ofertas atualizadas</strong>
       <span>Catalogo leve, rapido e pronto para compartilhar.</span>
+    </div>
+  </section>
+
+  <section class="group-promo" id="grupos" aria-labelledby="groupTitle">
+    <div class="group-promo-copy">
+      <p class="eyebrow">Comunidade de ofertas</p>
+      <h2 id="groupTitle">Receba os achadinhos nos grupos oficiais</h2>
+      <p>Divulgamos selecoes rapidas para WhatsApp, Telegram e um grupo especial para ofertas AliExpress.</p>
+    </div>
+    <div class="group-cards">
+      <article class="group-card group-card-main">
+        <img src="/assets/groups/whatsapp-telegram-ofertas.svg" alt="Logo do grupo WhatsApp e Telegram Achadinhos" loading="lazy">
+        <div>
+          <span>WhatsApp + Telegram</span>
+          <h3>Grupo principal de ofertas</h3>
+          <p>Alertas curtos com achadinhos selecionados das principais lojas.</p>
+          <button class="group-button" data-group-link="" data-group-name="grupo principal">Link em breve</button>
+        </div>
+      </article>
+      <article class="group-card group-card-ali">
+        <img src="/assets/groups/aliexpress-grupo.svg" alt="Logo do grupo AliExpress Achadinhos" loading="lazy">
+        <div>
+          <span>AliExpress</span>
+          <h3>Grupo AliExpress garimpos</h3>
+          <p>Espaco separado para importados, gadgets e ofertas rapidas do Ali.</p>
+          <button class="group-button" data-group-link="" data-group-name="grupo AliExpress">Link em breve</button>
+        </div>
+      </article>
     </div>
   </section>
 
@@ -383,6 +412,23 @@ modalShare.addEventListener("click", async () => {
     document.body.removeChild(textarea);
     showToast("Link copiado");
   }
+});
+
+document.querySelectorAll(".group-button").forEach((button) => {
+  button.addEventListener("click", async () => {
+    const link = button.dataset.groupLink;
+    const name = button.dataset.groupName || "grupo";
+    if (!link) {
+      showToast(`Link do ${name} ainda nao configurado`);
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(link);
+      showToast("Link do grupo copiado");
+    } catch {
+      window.location.href = link;
+    }
+  });
 });
 
 let toastTimeout = null;

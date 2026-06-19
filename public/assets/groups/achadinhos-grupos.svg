@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="900" viewBox="0 0 900 900" role="img" aria-labelledby="title desc">
+  <title id="title">Achadinhos Ofertas Brasil Grupos</title>
+  <desc id="desc">Logo circular para os grupos de ofertas do WhatsApp e Telegram.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#111827"/>
+      <stop offset=".56" stop-color="#1e3a5f"/>
+      <stop offset="1" stop-color="#f97316"/>
+    </linearGradient>
+    <linearGradient id="tag" x1="0" x2="1">
+      <stop stop-color="#ffb020"/>
+      <stop offset="1" stop-color="#f97316"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="28" stdDeviation="26" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+  </defs>
+  <rect width="900" height="900" rx="210" fill="url(#bg)"/>
+  <circle cx="715" cy="175" r="150" fill="#fff" opacity=".09"/>
+  <circle cx="165" cy="730" r="190" fill="#fff" opacity=".08"/>
+  <g filter="url(#shadow)">
+    <path d="M242 286h416c42 0 76 34 76 76v174c0 42-34 76-76 76H457l-126 92v-92h-89c-42 0-76-34-76-76V362c0-42 34-76 76-76Z" fill="#fff"/>
+    <path d="M257 364h386" stroke="#111827" stroke-width="32" stroke-linecap="round"/>
+    <path d="M257 449h284" stroke="#64748b" stroke-width="28" stroke-linecap="round"/>
+    <path d="M257 528h194" stroke="#cbd5e1" stroke-width="28" stroke-linecap="round"/>
+    <path d="M562 457h96l-36 126-44-78h-84l68-48Z" fill="url(#tag)"/>
+  </g>
+  <text x="450" y="196" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="62" font-weight="900" fill="#fff">ACHADINHOS</text>
+  <text x="450" y="780" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="800" fill="#fff">OFERTAS BRASIL</text>
+</svg>
