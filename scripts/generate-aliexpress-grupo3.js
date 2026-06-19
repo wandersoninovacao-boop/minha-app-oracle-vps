@@ -43,12 +43,14 @@ function messageFor(product, index, settings) {
 
   return [
     brand,
-    `GRUPO DE 3 ALIEXPRESS - OFERTA ${index} DE 3`,
+    "PROMOCAO EXCLUSIVA DO GRUPO ALIEXPRESS",
+    `GRUPO DE 3 - OFERTA ${index} DE 3`,
     product.name,
     price,
     benefit,
     `Oferta no AliExpress: ${product.affiliateLink}`,
     call,
+    "Esta promocao e exclusiva do grupo AliExpress.",
   ].filter(Boolean).join("\n");
 }
 
@@ -85,6 +87,9 @@ function main() {
 
   const payload = {
     generatedAt: new Date().toISOString(),
+    destination: "aliexpress-only",
+    destinationEnv: "ALIEXPRESS_TELEGRAM_CHAT_ID",
+    exclusive: true,
     mode: onlyReady ? "only-ready" : "draft-including-paused",
     warning: onlyReady
       ? "Somente produtos Pronto foram incluidos."

@@ -87,6 +87,9 @@ async function main() {
   }
 
   const queue = JSON.parse(fs.readFileSync(queuePath, "utf8"));
+  if (queue.destination === "aliexpress-only" && chatEnv !== "ALIEXPRESS_TELEGRAM_CHAT_ID") {
+    throw new Error("Fila exclusiva AliExpress recusada: use somente ALIEXPRESS_TELEGRAM_CHAT_ID.");
+  }
   const posts = Array.isArray(queue.posts) ? queue.posts : [];
   if (expectedCount && posts.length !== expectedCount) {
     throw new Error(`A fila precisa conter exatamente ${expectedCount} anuncios; encontrados: ${posts.length}.`);

@@ -50,4 +50,14 @@ npm run groups:send
 - Cada oferta e enviada individualmente com sua propria imagem.
 - O envio inteiro e cancelado se nao existirem exatamente tres produtos AliExpress marcados como `Pronto`.
 
+## Regra absoluta de destino
+
+As promocoes `Grupo de 3` sao exclusivas do grupo AliExpress.
+
+- Nunca enviar ao canal geral.
+- Nunca incluir no Top 5 geral.
+- Nunca enviar aos grupos de Shopee, Amazon, Mercado Livre ou Magalu.
+- Usar somente o destino `ALIEXPRESS_TELEGRAM_CHAT_ID`.
+- No WhatsApp, usar somente o grupo identificado como AliExpress.
+
 Nao marque produtos como `Pronto` enquanto nome, preco e link nao tiverem sido conferidos.
