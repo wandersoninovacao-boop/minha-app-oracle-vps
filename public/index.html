@@ -19,6 +19,7 @@
     </span>
   </a>
   <nav class="top-nav" aria-label="Navegacao principal">
+    <a href="#melhores">Melhores</a>
     <a href="#ofertas">Ofertas</a>
     <a href="#grupos">Grupos</a>
     <a href="#categorias">Categorias</a>
@@ -33,7 +34,7 @@
       <h1 id="heroTitle">Achadinhos Ofertas Brasil</h1>
       <p class="hero-copy">Produtos escolhidos para economizar tempo na busca e encontrar bons achados em marketplaces confiaveis.</p>
       <div class="hero-actions">
-        <a class="primary-link" href="#ofertas">Ver ofertas</a>
+        <a class="primary-link" href="#melhores">Melhores ofertas</a>
         <a class="secondary-link" href="#categorias">Filtrar loja</a>
       </div>
     </div>
@@ -65,6 +66,21 @@
     <div>
       <strong>Ofertas atualizadas</strong>
       <span>Catalogo leve, rapido e pronto para compartilhar.</span>
+    </div>
+  </section>
+
+  <section class="best-offers" id="melhores" aria-labelledby="bestOffersTitle">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Selecao principal</p>
+        <h2 id="bestOffersTitle">Melhores ofertas</h2>
+      </div>
+      <a class="section-link" href="#ofertas">Ver ofertas em destaque</a>
+    </div>
+    <div class="best-grid" id="bestOffersGrid">
+      <div class="best-loading skeleton-shimmer"></div>
+      <div class="best-loading skeleton-shimmer"></div>
+      <div class="best-loading skeleton-shimmer"></div>
     </div>
   </section>
 
@@ -202,11 +218,13 @@ const GROUP_LINKS = {
 
 let allProducts = [];
 let filteredProducts = [];
+let bestProducts = [];
 let searchTerm = "";
 let activePlatform = "";
 let searchTimeout = null;
 
 const grid = document.getElementById("productGrid");
+const bestOffersGrid = document.getElementById("bestOffersGrid");
 const searchInput = document.getElementById("searchInput");
 const tabsContainer = document.getElementById("tabsContainer");
 const resultCount = document.getElementById("resultCount");
@@ -231,9 +249,11 @@ async function loadProducts() {
     allProducts = data.products || [];
     document.getElementById("heroTitle").textContent = data.settings?.brandName || "Achadinhos Ofertas Brasil";
     updateSummary();
+    renderBestOffers();
     renderTabs();
     renderGrid();
   } catch (err) {
+    bestOffersGrid.innerHTML = '<div class="empty">Nao foi possivel carregar as melhores ofertas agora.</div>';
     grid.innerHTML = '<div class="empty">Nao foi possivel carregar as ofertas agora.</div>';
     resultCount.textContent = "Erro ao carregar";
   }
@@ -305,6 +325,63 @@ function productText(product) {
   return [product.name, product.category, product.platform, product.benefit].join(" ").toLowerCase();
 }
 
+function priorityScore(product) {
+  const priority = String(product.priority || "").toLowerCase();
+  if (priority === "alta") return 3;
+  if (priority === "media") return 2;
+  return 1;
+}
+
+function isFlashDeal(product) {
+  return productText(product).includes("oferta relampago");
+}
+
+function renderBestOffers() {
+  bestProducts = allProducts
+    .slice()
+    .sort((a, b) => {
+      const flashDiff = Number(isFlashDeal(b)) - Number(isFlashDeal(a));
+      if (flashDiff) return flashDiff;
+      const priorityDiff = priorityScore(b) - priorityScore(a);
+      if (priorityDiff) return priorityDiff;
+      return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+    })
+    .slice(0, 4);
+
+  if (!bestProducts.length) {
+    bestOffersGrid.innerHTML = '<div class="empty">Nenhuma melhor oferta disponivel agora.</div>';
+    return;
+  }
+
+  bestOffersGrid.innerHTML = bestProducts.map((p, i) => {
+    const color = PLATFORM_COLORS[p.platform] || "#4b5563";
+    const gradient = PLATFORM_GRADIENTS[p.platform] || "linear-gradient(135deg, #64748b, #1f2937)";
+    const fmtPrice = formatPrice(p.price);
+    const label = isFlashDeal(p) ? "Oferta relampago" : "Melhor oferta";
+
+    return `<article class="best-card" data-best-index="${i}">
+      <div class="best-media">
+        ${p.image
+          ? `<img src="${p.image}" alt="${p.name || "Produto"}" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentElement.classList.add('no-image');this.remove();">`
+          : ""}
+        <div class="best-placeholder" style="background:${gradient}"><span>${getInitials(p.name)}</span></div>
+      </div>
+      <div class="best-body">
+        <div class="best-meta">
+          <span style="color:${color}">${p.platform || "Oferta"}</span>
+          <small>${label}</small>
+        </div>
+        <h3>${p.name || "Produto"}</h3>
+        <p>${p.category || "Selecionado"}</p>
+        <div class="best-footer">
+          <strong>${fmtPrice || "Conferir preco"}</strong>
+          <button class="card-btn" aria-label="Ver oferta de ${p.name || "produto"}">Ver</button>
+        </div>
+      </div>
+    </article>`;
+  }).join("");
+}
+
 function renderGrid() {
   filteredProducts = allProducts.slice();
   if (searchTerm) {
@@ -358,6 +435,14 @@ grid.addEventListener("click", (e) => {
   if (!card) return;
   const idx = parseInt(card.dataset.index, 10);
   const p = filteredProducts[idx];
+  if (p) openModal(p);
+});
+
+bestOffersGrid.addEventListener("click", (e) => {
+  const card = e.target.closest(".best-card");
+  if (!card) return;
+  const idx = parseInt(card.dataset.bestIndex, 10);
+  const p = bestProducts[idx];
   if (p) openModal(p);
 });
 
