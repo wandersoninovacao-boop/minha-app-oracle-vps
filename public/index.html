@@ -77,7 +77,7 @@
       </div>
       <a class="section-link" href="#ofertas">Ver ofertas em destaque</a>
     </div>
-    <div class="best-grid" id="bestOffersGrid">
+    <div class="best-platforms" id="bestOffersGrid">
       <div class="best-loading skeleton-shimmer"></div>
       <div class="best-loading skeleton-shimmer"></div>
       <div class="best-loading skeleton-shimmer"></div>
@@ -346,7 +346,7 @@ function compareBestOffers(a, b) {
   return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
 }
 
-function selectBestOffers(limit = 4) {
+function selectBestOffersByPlatform(limitPerPlatform = 5) {
   const byPlatform = new Map();
 
   for (const product of allProducts) {
@@ -355,54 +355,66 @@ function selectBestOffers(limit = 4) {
     byPlatform.get(platform).push(product);
   }
 
-  const platformWinners = Array.from(byPlatform.values())
-    .map((products) => products.slice().sort(compareBestOffers)[0])
-    .filter(Boolean)
-    .sort(compareBestOffers);
-
-  const selected = platformWinners.slice(0, limit);
-  const selectedIds = new Set(selected.map((product) => product.id));
-  const remaining = allProducts
-    .filter((product) => !selectedIds.has(product.id))
-    .sort(compareBestOffers);
-
-  return selected.concat(remaining).slice(0, limit);
+  return Array.from(byPlatform.entries())
+    .map(([platform, products]) => ({
+      platform,
+      products: products.slice().sort(compareBestOffers).slice(0, limitPerPlatform)
+    }))
+    .filter((group) => group.products.length)
+    .sort((a, b) => compareBestOffers(a.products[0], b.products[0]));
 }
 
 function renderBestOffers() {
-  bestProducts = selectBestOffers(4);
+  const groups = selectBestOffersByPlatform(5);
+  bestProducts = groups.flatMap((group) => group.products);
 
   if (!bestProducts.length) {
     bestOffersGrid.innerHTML = '<div class="empty">Nenhuma melhor oferta disponivel agora.</div>';
     return;
   }
 
-  bestOffersGrid.innerHTML = bestProducts.map((p, i) => {
-    const color = PLATFORM_COLORS[p.platform] || "#4b5563";
-    const gradient = PLATFORM_GRADIENTS[p.platform] || "linear-gradient(135deg, #64748b, #1f2937)";
-    const fmtPrice = formatPrice(p.price);
-    const label = isFlashDeal(p) ? "Oferta relampago" : "Melhor da loja";
+  let bestIndex = 0;
+  bestOffersGrid.innerHTML = groups.map((group) => {
+    const cards = group.products.map((p) => {
+      const i = bestIndex++;
+      const color = PLATFORM_COLORS[p.platform] || "#4b5563";
+      const gradient = PLATFORM_GRADIENTS[p.platform] || "linear-gradient(135deg, #64748b, #1f2937)";
+      const fmtPrice = formatPrice(p.price);
+      const label = isFlashDeal(p) ? "Oferta relampago" : "Melhor da loja";
 
-    return `<article class="best-card" data-best-index="${i}">
-      <div class="best-media">
-        ${p.image
-          ? `<img src="${p.image}" alt="${p.name || "Produto"}" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentElement.classList.add('no-image');this.remove();">`
-          : ""}
-        <div class="best-placeholder" style="background:${gradient}"><span>${getInitials(p.name)}</span></div>
-      </div>
-      <div class="best-body">
-        <div class="best-meta">
-          <span style="color:${color}">${p.platform || "Oferta"}</span>
-          <small>${label}</small>
+      return `<article class="best-card" data-best-index="${i}">
+        <div class="best-media">
+          ${p.image
+            ? `<img src="${p.image}" alt="${p.name || "Produto"}" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentElement.classList.add('no-image');this.remove();">`
+            : ""}
+          <div class="best-placeholder" style="background:${gradient}"><span>${getInitials(p.name)}</span></div>
         </div>
-        <h3>${p.name || "Produto"}</h3>
-        <p>${p.category || "Selecionado"}</p>
-        <div class="best-footer">
-          <strong>${fmtPrice || "Conferir preco"}</strong>
-          <button class="card-btn" aria-label="Ver oferta de ${p.name || "produto"}">Ver</button>
+        <div class="best-body">
+          <div class="best-meta">
+            <span style="color:${color}">${p.platform || "Oferta"}</span>
+            <small>${label}</small>
+          </div>
+          <h3>${p.name || "Produto"}</h3>
+          <p>${p.category || "Selecionado"}</p>
+          <div class="best-footer">
+            <strong>${fmtPrice || "Conferir preco"}</strong>
+            <button class="card-btn" aria-label="Ver oferta de ${p.name || "produto"}">Ver</button>
+          </div>
         </div>
+      </article>`;
+    }).join("");
+
+    const color = PLATFORM_COLORS[group.platform] || "#4b5563";
+    return `<section class="best-platform-group" aria-label="Melhores ofertas ${group.platform}">
+      <div class="best-platform-heading">
+        <div>
+          <span style="color:${color}">${group.platform}</span>
+          <h3>Top ${group.products.length} ${group.platform}</h3>
+        </div>
+        <small>${group.products.length} principais</small>
       </div>
-    </article>`;
+      <div class="best-grid">${cards}</div>
+    </section>`;
   }).join("");
 }
 
