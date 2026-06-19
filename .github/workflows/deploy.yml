@@ -96,6 +96,7 @@ jobs:
                   - PORT=3000
                   - SHOPEE_TELEGRAM_BOT_TOKEN=${SHOPEE_TELEGRAM_BOT_TOKEN}
                   - SHOPEE_TELEGRAM_CHAT_ID=${SHOPEE_TELEGRAM_CHAT_ID}
+                  - ALIEXPRESS_TELEGRAM_CHAT_ID=${ALIEXPRESS_TELEGRAM_CHAT_ID}
                 volumes:
                   - app_data:/app/data
                 networks:
@@ -129,6 +130,7 @@ jobs:
             APP_IMAGE=${{ steps.image.outputs.name }}:latest
             SHOPEE_TELEGRAM_BOT_TOKEN=${{ secrets.SHOPEE_TELEGRAM_BOT_TOKEN }}
             SHOPEE_TELEGRAM_CHAT_ID=${{ secrets.SHOPEE_TELEGRAM_CHAT_ID }}
+            ALIEXPRESS_TELEGRAM_CHAT_ID=${{ secrets.ALIEXPRESS_TELEGRAM_CHAT_ID }}
             ENV
 
             cd /opt/minha-app

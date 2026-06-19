@@ -23,8 +23,11 @@ function parseMoney(value) {
 }
 
 function formatMoney(value) {
-  if (!value) return "preco a conferir";
-  return `R$ ${value}`;
+  const amount = parseMoney(value);
+  if (!amount) return "Conferir preco no site";
+  return amount
+    .toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
+    .replace(/\u00a0/g, " ");
 }
 
 function priorityRank(value) {
@@ -39,12 +42,13 @@ function messageFor(product, index, settings) {
   const benefit = product.benefit || "oferta selecionada para compra rapida";
 
   return [
-    `${index}. ${product.name}`,
-    `${price} | ${product.category || "AliExpress"}`,
+    brand,
+    `GRUPO DE 3 ALIEXPRESS - OFERTA ${index} DE 3`,
+    product.name,
+    price,
     benefit,
-    product.affiliateLink,
-    "",
-    index === 3 ? `${brand} - Grupo de 3 AliExpress. ${call}` : "",
+    `Oferta no AliExpress: ${product.affiliateLink}`,
+    call,
   ].filter(Boolean).join("\n");
 }
 
@@ -65,6 +69,7 @@ function main() {
   if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
 
   const posts = eligible.map((product, index) => ({
+    sequence: index + 1,
     index: index + 1,
     productId: product.id,
     name: product.name,
@@ -74,6 +79,7 @@ function main() {
     priority: product.priority,
     status: product.status,
     affiliateLink: product.affiliateLink,
+    image: product.image || "",
     text: messageFor(product, index + 1, settings),
   }));
 

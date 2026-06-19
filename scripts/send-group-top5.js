@@ -2,7 +2,16 @@ const fs = require("fs");
 const path = require("path");
 
 const root = path.resolve(__dirname, "..");
-const queuePath = path.join(root, "out", "grupos-top5.json");
+const args = process.argv.slice(2);
+const option = (name, fallback) => {
+  const prefix = `--${name}=`;
+  const arg = args.find((item) => item.startsWith(prefix));
+  return arg ? arg.slice(prefix.length) : fallback;
+};
+const queueFile = option("queue", "grupos-top5.json");
+const chatEnv = option("chat-env", "SHOPEE_TELEGRAM_CHAT_ID");
+const expectedCount = Number(option("expected", "0")) || 0;
+const queuePath = path.join(root, "out", path.basename(queueFile));
 const dryRun = process.argv.includes("--dry-run");
 
 const mimeTypes = {
@@ -79,6 +88,9 @@ async function main() {
 
   const queue = JSON.parse(fs.readFileSync(queuePath, "utf8"));
   const posts = Array.isArray(queue.posts) ? queue.posts : [];
+  if (expectedCount && posts.length !== expectedCount) {
+    throw new Error(`A fila precisa conter exatamente ${expectedCount} anuncios; encontrados: ${posts.length}.`);
+  }
   if (!posts.length) throw new Error("A fila nao possui anuncios individuais.");
 
   const validations = posts.map((post) => ({ post, ...validatePost(post) }));
@@ -100,9 +112,9 @@ async function main() {
   }
 
   const token = process.env.SHOPEE_TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.SHOPEE_TELEGRAM_CHAT_ID;
+  const chatId = process.env[chatEnv];
   if (!token || !chatId) {
-    throw new Error("Configure SHOPEE_TELEGRAM_BOT_TOKEN e SHOPEE_TELEGRAM_CHAT_ID.");
+    throw new Error(`Configure SHOPEE_TELEGRAM_BOT_TOKEN e ${chatEnv}.`);
   }
 
   for (const item of validations) {
