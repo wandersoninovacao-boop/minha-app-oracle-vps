@@ -137,6 +137,16 @@ jobs:
             docker compose up -d
             docker image prune -f
 
+            # Sync versioned catalog into persistent data volume.
+            # The /app/data volume preserves admin edits, but it also hides
+            # data/products.json shipped in the new image. For this catalog
+            # site, the Git version is the source of truth after deploy.
+            docker rm -f catalog-seed 2>/dev/null || true
+            docker create --name catalog-seed ${{ steps.image.outputs.name }}:latest >/dev/null
+            docker cp catalog-seed:/app/data/products.json /tmp/products.json
+            docker cp /tmp/products.json minha-app-app-1:/app/data/products.json
+            docker rm -f catalog-seed >/dev/null
+
             # Force re-create Caddy to pick up new Caddyfile with DuckDNS domain
             echo "=== RECREATING CADDY (FORCE) ==="
             docker compose stop caddy
