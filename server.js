@@ -7,6 +7,10 @@ const root = __dirname;
 const dataPath = path.join(root, "data", "products.json");
 const nodeExe = process.execPath;
 const port = Number(process.env.PORT || 3000);
+const flashDealTtlHours = Number(process.env.FLASH_DEAL_TTL_HOURS || 24);
+const flashDealTtlMs = Number.isFinite(flashDealTtlHours) && flashDealTtlHours > 0
+  ? flashDealTtlHours * 60 * 60 * 1000
+  : 24 * 60 * 60 * 1000;
 
 const mimeTypes = {
   ".html": "text/html; charset=utf-8",
@@ -63,6 +67,36 @@ function runNodeScript(script) {
   });
 }
 
+function parseDateMs(value) {
+  if (!value) return null;
+  const time = Date.parse(value);
+  return Number.isNaN(time) ? null : time;
+}
+
+function isFlashDeal(product) {
+  const platform = String(product.platform || "").toLowerCase();
+  const category = String(product.category || "").toLowerCase();
+  const benefit = String(product.benefit || "").toLowerCase();
+  return platform === "shopee" && (category.includes("oferta relampago") || benefit.includes("oferta relampago"));
+}
+
+function flashDealExpiresAt(product) {
+  const explicitExpiresAt = parseDateMs(product.expiresAt);
+  if (explicitExpiresAt) return explicitExpiresAt;
+
+  const baseTime = parseDateMs(product.postedAt) || parseDateMs(product.createdAt);
+  if (!baseTime) return null;
+  return baseTime + flashDealTtlMs;
+}
+
+function isPublicProduct(product, now = Date.now()) {
+  if (product.status === "Pausado") return false;
+  if (!isFlashDeal(product)) return true;
+
+  const expiresAt = flashDealExpiresAt(product);
+  return Boolean(expiresAt) && expiresAt > now;
+}
+
 async function handleApi(req, res) {
   const url = req.url;
 
@@ -78,7 +112,7 @@ async function handleApi(req, res) {
     }
     const raw = fs.readFileSync(dataPath, "utf8");
     const data = JSON.parse(raw);
-    const active = (data.products || []).filter((p) => p.status !== "Pausado");
+    const active = (data.products || []).filter((p) => isPublicProduct(p));
     return send(res, 200, JSON.stringify({ products: active, settings: data.settings || {} }));
   }
 

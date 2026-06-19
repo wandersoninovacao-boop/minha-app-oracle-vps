@@ -438,7 +438,8 @@
             "benefit": "Oferta Relampago Shopee: fritadeira eletrica sem oleo 4L com timer e controle de temperatura, a mais vendida da categoria",
             "status": "Postado",
             "createdAt": "2026-06-10T00:00:00.000Z",
-            "postedAt": "2026-06-19T04:57:40.222Z"
+            "postedAt": "2026-06-19T04:57:40.222Z",
+            "expiresAt": "2026-06-20T04:57:40.222Z"
         },
         {
             "id": "shopee-n2",
@@ -453,7 +454,8 @@
             "benefit": "Oferta Relampago Shopee: caixa de som portatil a prova d agua IP67, som JBL e bateria de 7h, ideal para Copa",
             "status": "Postado",
             "createdAt": "2026-06-10T00:00:00.000Z",
-            "postedAt": "2026-06-19T04:57:40.222Z"
+            "postedAt": "2026-06-19T04:57:40.222Z",
+            "expiresAt": "2026-06-20T04:57:40.222Z"
         },
         {
             "id": "shopee-n3",
@@ -468,7 +470,8 @@
             "benefit": "Oferta Relampago Shopee: fone bluetooth 5.1 com 40h de bateria, 4 microfones e controle touch, o mais vendido da Shopee",
             "status": "Postado",
             "createdAt": "2026-06-10T00:00:00.000Z",
-            "postedAt": "2026-06-19T04:57:40.222Z"
+            "postedAt": "2026-06-19T04:57:40.222Z",
+            "expiresAt": "2026-06-20T04:57:40.222Z"
         },
         {
             "id": "shopee-n4",
@@ -483,7 +486,8 @@
             "benefit": "Oferta Relampago Shopee: smart TV 43 polegadas com sistema Roku, Wi-Fi e HDMI, ideal para assistir a Copa do Mundo",
             "status": "Postado",
             "createdAt": "2026-06-10T00:00:00.000Z",
-            "postedAt": "2026-06-19T04:57:40.222Z"
+            "postedAt": "2026-06-19T04:57:40.222Z",
+            "expiresAt": "2026-06-20T04:57:40.222Z"
         },
         {
             "id": "shopee-n5",
@@ -498,7 +502,8 @@
             "benefit": "Oferta Relampago Shopee: aspirador portatil 2 em 1 com 1200W de potencia, ciclonico e sem saco, facil de usar",
             "status": "Postado",
             "createdAt": "2026-06-10T00:00:00.000Z",
-            "postedAt": "2026-06-19T04:57:40.222Z"
+            "postedAt": "2026-06-19T04:57:40.222Z",
+            "expiresAt": "2026-06-20T04:57:40.222Z"
         },
         {
             "id": "amazon-6",
