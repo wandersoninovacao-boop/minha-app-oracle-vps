@@ -275,20 +275,44 @@ main {
   font-size: 0.9rem;
   line-height: 1.5;
 }
+.group-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
 .group-button {
   min-height: 42px;
-  margin-top: 16px;
   padding: 0 15px;
   border: 0;
   border-radius: 8px;
   background: #111827;
   color: #fff;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-weight: 850;
+  text-decoration: none;
 }
 .group-button:hover { background: #1f2937; }
+.group-button-whatsapp { background: #16a34a; }
+.group-button-whatsapp:hover { background: #15803d; }
+.group-button-ali,
 .group-card-ali .group-button { background: #e62e04; }
+.group-button-ali:hover,
 .group-card-ali .group-button:hover { background: #c72406; }
+.group-button-secondary {
+  background: #eef2f6;
+  color: #111827;
+}
+.group-button-secondary:hover { background: #e2e8f0; }
+.group-button-disabled,
+.group-button-disabled:hover {
+  background: #d9e0e8;
+  color: #667085;
+  cursor: not-allowed;
+}
 
 .catalog-shell {
   max-width: 1240px;
@@ -820,6 +844,9 @@ footer strong { color: #111827; }
     font-size: 0.82rem;
   }
   .group-button {
+    width: 100%;
+  }
+  .group-actions {
     width: 100%;
   }
   .section-heading {
