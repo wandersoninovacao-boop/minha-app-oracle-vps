@@ -336,17 +336,41 @@ function isFlashDeal(product) {
   return productText(product).includes("oferta relampago");
 }
 
+function compareBestOffers(a, b) {
+  const priorityDiff = priorityScore(b) - priorityScore(a);
+  if (priorityDiff) return priorityDiff;
+
+  const flashDiff = Number(isFlashDeal(b)) - Number(isFlashDeal(a));
+  if (flashDiff) return flashDiff;
+
+  return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+}
+
+function selectBestOffers(limit = 4) {
+  const byPlatform = new Map();
+
+  for (const product of allProducts) {
+    const platform = product.platform || "Oferta";
+    if (!byPlatform.has(platform)) byPlatform.set(platform, []);
+    byPlatform.get(platform).push(product);
+  }
+
+  const platformWinners = Array.from(byPlatform.values())
+    .map((products) => products.slice().sort(compareBestOffers)[0])
+    .filter(Boolean)
+    .sort(compareBestOffers);
+
+  const selected = platformWinners.slice(0, limit);
+  const selectedIds = new Set(selected.map((product) => product.id));
+  const remaining = allProducts
+    .filter((product) => !selectedIds.has(product.id))
+    .sort(compareBestOffers);
+
+  return selected.concat(remaining).slice(0, limit);
+}
+
 function renderBestOffers() {
-  bestProducts = allProducts
-    .slice()
-    .sort((a, b) => {
-      const flashDiff = Number(isFlashDeal(b)) - Number(isFlashDeal(a));
-      if (flashDiff) return flashDiff;
-      const priorityDiff = priorityScore(b) - priorityScore(a);
-      if (priorityDiff) return priorityDiff;
-      return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
-    })
-    .slice(0, 4);
+  bestProducts = selectBestOffers(4);
 
   if (!bestProducts.length) {
     bestOffersGrid.innerHTML = '<div class="empty">Nenhuma melhor oferta disponivel agora.</div>';
@@ -357,7 +381,7 @@ function renderBestOffers() {
     const color = PLATFORM_COLORS[p.platform] || "#4b5563";
     const gradient = PLATFORM_GRADIENTS[p.platform] || "linear-gradient(135deg, #64748b, #1f2937)";
     const fmtPrice = formatPrice(p.price);
-    const label = isFlashDeal(p) ? "Oferta relampago" : "Melhor oferta";
+    const label = isFlashDeal(p) ? "Oferta relampago" : "Melhor da loja";
 
     return `<article class="best-card" data-best-index="${i}">
       <div class="best-media">
