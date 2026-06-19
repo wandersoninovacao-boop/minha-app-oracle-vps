@@ -433,12 +433,12 @@
             "commission": "",
             "category": "Casa e cozinha",
             "priority": "Alta",
-            "affiliateLink": "https://shopee.com.br/product/123456789/",
+            "affiliateLink": "https://shopee.com.br/search?keyword=Air%20Fryer%20Mondial%20AFN-40%204L",
             "image": "/assets/products/shopee-n1.svg",
             "benefit": "fritadeira eletrica sem oleo 4L com timer e controle de temperatura, a mais vendida da categoria",
-            "status": "Pausado",
+            "status": "Postado",
             "createdAt": "2026-06-10T00:00:00.000Z",
-            "postedAt": null
+            "postedAt": "2026-06-19T04:57:40.222Z"
         },
         {
             "id": "shopee-n2",
@@ -448,12 +448,12 @@
             "commission": "",
             "category": "Eletronicos baratos",
             "priority": "Alta",
-            "affiliateLink": "https://shopee.com.br/product/234567890/",
+            "affiliateLink": "https://shopee.com.br/search?keyword=Caixa%20de%20Som%20JBL%20Go%204%20Bluetooth",
             "image": "/assets/products/shopee-n2.svg",
             "benefit": "caixa de som portatil a prova d agua IP67, som JBL e bateria de 7h, ideal para Copa",
-            "status": "Pausado",
+            "status": "Postado",
             "createdAt": "2026-06-10T00:00:00.000Z",
-            "postedAt": null
+            "postedAt": "2026-06-19T04:57:40.222Z"
         },
         {
             "id": "shopee-n3",
@@ -463,12 +463,12 @@
             "commission": "",
             "category": "Eletronicos baratos",
             "priority": "Alta",
-            "affiliateLink": "https://shopee.com.br/product/345678901/",
+            "affiliateLink": "https://shopee.com.br/search?keyword=Fone%20QCY%20T13%20TWS%20Original",
             "image": "/assets/products/shopee-n3.svg",
             "benefit": "fone bluetooth 5.1 com 40h de bateria, 4 microfones e controle touch, o mais vendido da Shopee",
-            "status": "Pausado",
+            "status": "Postado",
             "createdAt": "2026-06-10T00:00:00.000Z",
-            "postedAt": null
+            "postedAt": "2026-06-19T04:57:40.222Z"
         },
         {
             "id": "shopee-n4",
@@ -478,12 +478,12 @@
             "commission": "",
             "category": "TV e Video",
             "priority": "Media",
-            "affiliateLink": "https://shopee.com.br/product/456789012/",
+            "affiliateLink": "https://shopee.com.br/search?keyword=Smart%20TV%2043%20Full%20HD%20Multi%20Roku",
             "image": "/assets/products/shopee-n4.svg",
             "benefit": "smart TV 43 polegadas com sistema Roku, Wi-Fi e HDMI, ideal para assistir a Copa do Mundo",
-            "status": "Pausado",
+            "status": "Postado",
             "createdAt": "2026-06-10T00:00:00.000Z",
-            "postedAt": null
+            "postedAt": "2026-06-19T04:57:40.222Z"
         },
         {
             "id": "shopee-n5",
@@ -493,12 +493,12 @@
             "commission": "",
             "category": "Casa e cozinha",
             "priority": "Media",
-            "affiliateLink": "https://shopee.com.br/product/567890123/",
+            "affiliateLink": "https://shopee.com.br/search?keyword=Aspirador%20Vertical%20Britania%202%20em%201%201200W",
             "image": "/assets/products/shopee-n5.svg",
             "benefit": "aspirador portatil 2 em 1 com 1200W de potencia, ciclonico e sem saco, facil de usar",
-            "status": "Pausado",
+            "status": "Postado",
             "createdAt": "2026-06-10T00:00:00.000Z",
-            "postedAt": null
+            "postedAt": "2026-06-19T04:57:40.222Z"
         },
         {
             "id": "amazon-6",
