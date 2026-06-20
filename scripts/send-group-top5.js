@@ -58,7 +58,11 @@ function validatePost(post) {
 
   if (!post.productId) errors.push("produto sem ID");
   if (!post.text) errors.push("produto sem texto");
+  if (!post.price || !/\d/.test(String(post.price)) || /conferir|preco no site/i.test(String(post.price))) {
+    errors.push("produto sem preco numerico confirmado");
+  }
   if (!post.image) errors.push("produto sem imagem");
+  if (post.imageVerified !== true) errors.push("imagem real do produto nao verificada");
   if (post.image && !imagePath && !/^https?:\/\//i.test(post.image)) errors.push("imagem local nao encontrada");
   if (imagePath && !mimeTypes[extension]) errors.push(`formato de imagem nao suportado: ${extension}`);
 
@@ -123,7 +127,7 @@ async function main() {
   }
 
   if (invalid.length) {
-    throw new Error(`${invalid.length} anuncio(s) sem imagem valida. Envio cancelado.`);
+    throw new Error(`${invalid.length} anuncio(s) nao atendem aos requisitos de preco e imagem. Envio cancelado.`);
   }
 
   if (dryRun) {

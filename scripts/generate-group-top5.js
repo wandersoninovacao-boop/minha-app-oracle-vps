@@ -126,14 +126,13 @@ function groupTopOffers(products, limitPerPlatform = 5) {
 
 function postText(product, brandName) {
   const badge = isFlashDeal(product) ? "OFERTA RELAMPAGO" : "MELHOR OFERTA";
+  const summary = product.benefit || product.category || "Oferta selecionada.";
   return [
-    brandName,
-    badge,
+    `${badge} | ${product.platform || brandName}`,
     product.name || "Produto",
     formatMoney(product.price),
-    product.benefit || product.category || "Oferta selecionada.",
-    `Oferta no ${product.platform || "site"}: ${product.affiliateLink || ""}`,
-    "Confira preco, frete e disponibilidade antes de comprar."
+    summary.length > 120 ? `${summary.slice(0, 117)}...` : summary,
+    product.affiliateLink || ""
   ].filter(Boolean).join("\n");
 }
 
@@ -166,6 +165,7 @@ function main() {
       price: formatMoney(product.price),
       affiliateLink: product.affiliateLink || "",
       image: product.image || "",
+      imageVerified: product.imageVerified === true,
       text: postText(product, brandName)
     };
   }));

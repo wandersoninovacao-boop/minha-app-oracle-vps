@@ -59,21 +59,16 @@ function priorityRank(value) {
 }
 
 function messageFor(product, index, settings) {
-  const brand = settings.brandName || "Achadinhos Ofertas Brasil";
-  const call = settings.call || "Confira preco, frete e prazo antes de comprar.";
   const price = formatMoney(product.price);
   const benefit = product.benefit || "oferta selecionada para compra rapida";
+  const summary = benefit.length > 110 ? `${benefit.slice(0, 107)}...` : benefit;
 
   return [
-    brand,
-    "PROMOCAO EXCLUSIVA DO GRUPO ALIEXPRESS",
-    `GRUPO DE 3 - OFERTA ${index} DE 3`,
+    `GRUPO DE 3 ALIEXPRESS | ${index}/3`,
     product.name,
     price,
-    benefit,
-    `Oferta no AliExpress: ${product.affiliateLink}`,
-    call,
-    "Esta promocao e exclusiva do grupo AliExpress.",
+    summary,
+    product.affiliateLink
   ].filter(Boolean).join("\n");
 }
 
@@ -115,6 +110,7 @@ function main() {
     status: product.status,
     affiliateLink: product.affiliateLink,
     image: product.image || "",
+    imageVerified: product.imageVerified === true,
     text: messageFor(product, index + 1, settings),
   }));
 

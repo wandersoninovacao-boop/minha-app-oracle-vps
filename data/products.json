@@ -260,12 +260,11 @@
       "priority": "Alta",
       "affiliateLink": "https://pt.aliexpress.com/item/1005005222129894.html",
       "image": "/assets/products/aliexpress-1.png",
+      "imageVerified": false,
       "benefit": "fone Bluetooth 5.3 com cancelamento ativo de ruido, modo transparencia e baixa latencia",
-      "status": "Pronto",
+      "status": "Pausado",
       "createdAt": "2026-06-02T00:00:00.000Z",
-      "postedAt": null,
-      "lastGroupPostedAt": "2026-06-20",
-      "lastGroupPostSignature": "[\"Preco no site\",\"https://pt.aliexpress.com/item/1005005222129894.html\"]"
+      "postedAt": null
     },
     {
       "id": "aliexpress-2",
@@ -307,12 +306,11 @@
       "priority": "Media",
       "affiliateLink": "https://pt.aliexpress.com/item/1005004847794096.html",
       "image": "/assets/products/aliexpress-4.png",
+      "imageVerified": false,
       "benefit": "fone gamer Bluetooth 5.3 com modo de baixa latencia, controles touch e estojo de carregamento",
-      "status": "Pronto",
+      "status": "Pausado",
       "createdAt": "2026-06-02T00:00:00.000Z",
-      "postedAt": null,
-      "lastGroupPostedAt": "2026-06-20",
-      "lastGroupPostSignature": "[\"Preco no site\",\"https://pt.aliexpress.com/item/1005004847794096.html\"]"
+      "postedAt": null
     },
     {
       "id": "aliexpress-5",
@@ -324,12 +322,11 @@
       "priority": "Media",
       "affiliateLink": "https://pt.aliexpress.com/item/1005011755232439.html",
       "image": "/assets/products/aliexpress-5.png",
+      "imageVerified": false,
       "benefit": "fone sem fio compacto para uso diario, com som limpo, boa autonomia e conexao Bluetooth",
-      "status": "Pronto",
+      "status": "Pausado",
       "createdAt": "2026-06-02T00:00:00.000Z",
-      "postedAt": null,
-      "lastGroupPostedAt": "2026-06-20",
-      "lastGroupPostSignature": "[\"Preco no site\",\"https://pt.aliexpress.com/item/1005011755232439.html\"]"
+      "postedAt": null
     },
     {
       "id": "ml-n1",
