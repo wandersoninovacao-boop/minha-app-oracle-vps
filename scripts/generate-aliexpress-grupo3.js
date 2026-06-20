@@ -13,6 +13,29 @@ const count = Number(countArg ? countArg.split("=")[1] : 3) || 3;
 const onlyReady = args.includes("--only-ready");
 const markReady = args.includes("--mark-ready");
 
+function todayDate() {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Sao_Paulo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).format(new Date());
+}
+
+function postSignature(product) {
+  return JSON.stringify([
+    String(product.price || "").trim(),
+    String(product.affiliateLink || "").trim()
+  ]);
+}
+
+function canPostToday(product) {
+  const lastPosted = product.lastGroupPostedAt;
+  if (!lastPosted) return true;
+  if (lastPosted !== todayDate()) return true;
+  return product.lastGroupPostSignature !== postSignature(product);
+}
+
 function parseMoney(value) {
   if (!value) return 0;
   const normalized = String(value)
@@ -59,14 +82,24 @@ function main() {
   const settings = state.settings || {};
   const products = state.products || [];
 
+  const skipped = [];
   const eligible = products
     .filter((product) => product.platform === "AliExpress")
     .filter((product) => product.status !== "Postado")
     .filter((product) => (onlyReady ? product.status === "Pronto" : true))
+    .filter((product) => {
+      if (canPostToday(product)) return true;
+      skipped.push(product.id);
+      return false;
+    })
     .sort((a, b) => {
       return priorityRank(a.priority) - priorityRank(b.priority) || parseMoney(a.price) - parseMoney(b.price);
     })
     .slice(0, count);
+
+  if (skipped.length) {
+    console.log(`Pulado(s) por ja postado hoje no grupo AliExpress: ${skipped.join(", ")}`);
+  }
 
   if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
 

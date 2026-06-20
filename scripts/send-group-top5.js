@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 const root = path.resolve(__dirname, "..");
+const dataPath = path.join(root, "data", "products.json");
 const args = process.argv.slice(2);
 const option = (name, fallback) => {
   const prefix = `--${name}=`;
@@ -13,6 +14,22 @@ const chatEnv = option("chat-env", "SHOPEE_TELEGRAM_CHAT_ID");
 const expectedCount = Number(option("expected", "0")) || 0;
 const queuePath = path.join(root, "out", path.basename(queueFile));
 const dryRun = process.argv.includes("--dry-run");
+
+function todayDate() {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Sao_Paulo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).format(new Date());
+}
+
+function postSignature(product) {
+  return JSON.stringify([
+    String(product.price || "").trim(),
+    String(product.affiliateLink || "").trim()
+  ]);
+}
 
 const mimeTypes = {
   ".jpg": "image/jpeg",
@@ -120,6 +137,10 @@ async function main() {
     throw new Error(`Configure SHOPEE_TELEGRAM_BOT_TOKEN e ${chatEnv}.`);
   }
 
+  const state = JSON.parse(fs.readFileSync(dataPath, "utf8").replace(/^\uFEFF/, ""));
+  const productsMap = new Map((state.products || []).map((p) => [p.id, p]));
+  const today = todayDate();
+
   for (const item of validations) {
     const { post, imagePath } = item;
     const result = imagePath
@@ -128,6 +149,12 @@ async function main() {
     console.log(
       `Enviado ${post.sequence}/${posts.length}: ${post.productId} (messageId ${result.result?.message_id || "?"})`
     );
+    const product = productsMap.get(post.productId);
+    if (product) {
+      product.lastGroupPostedAt = today;
+      product.lastGroupPostSignature = postSignature(product);
+      fs.writeFileSync(dataPath, JSON.stringify(state, null, 2), "utf8");
+    }
     await sleep(1200);
   }
 

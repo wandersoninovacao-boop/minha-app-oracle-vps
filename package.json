@@ -10,9 +10,18 @@
     "groups:top5": "node scripts/generate-group-top5.js",
     "groups:prepare": "npm run groups:top5 && npm run aliexpress:grupo3 -- --only-ready",
     "groups:check": "node scripts/send-group-top5.js --dry-run && node scripts/send-group-top5.js --dry-run --queue=aliexpress-grupo3.json --chat-env=ALIEXPRESS_TELEGRAM_CHAT_ID --expected=3",
-    "groups:send": "npm run groups:check && node scripts/send-group-top5.js && node scripts/send-group-top5.js --queue=aliexpress-grupo3.json --chat-env=ALIEXPRESS_TELEGRAM_CHAT_ID --expected=3"
+    "groups:check-general": "node scripts/send-group-top5.js --dry-run",
+    "groups:send-general": "npm run groups:check-general && node scripts/send-group-top5.js",
+    "aliexpress:check": "node scripts/send-group-top5.js --dry-run --queue=aliexpress-grupo3.json --chat-env=ALIEXPRESS_TELEGRAM_CHAT_ID --expected=3",
+    "aliexpress:send": "npm run aliexpress:check && node scripts/send-group-top5.js --queue=aliexpress-grupo3.json --chat-env=ALIEXPRESS_TELEGRAM_CHAT_ID --expected=3",
+    "groups:send": "npm run groups:check && node scripts/send-group-top5.js && npm run aliexpress:send",
+    "whatsapp:qr": "node scripts/send-whatsapp.js --qr",
+    "whatsapp:send-aliexpress": "node scripts/send-whatsapp.js --send --queue=aliexpress-grupo3.json"
   },
   "dependencies": {
     "puppeteer-core": "^25.1.0"
+  },
+  "devDependencies": {
+    "whatsapp-web.js": "^1.26.0"
   }
 }

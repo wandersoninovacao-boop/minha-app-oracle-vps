@@ -10,6 +10,29 @@ const flashDealTtlMs = Number.isFinite(flashDealTtlHours) && flashDealTtlHours >
   ? flashDealTtlHours * 60 * 60 * 1000
   : 24 * 60 * 60 * 1000;
 
+function todayDate() {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Sao_Paulo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).format(new Date());
+}
+
+function postSignature(product) {
+  return JSON.stringify([
+    String(product.price || "").trim(),
+    String(product.affiliateLink || "").trim()
+  ]);
+}
+
+function canPostToday(product) {
+  const lastPosted = product.lastGroupPostedAt;
+  if (!lastPosted) return true;
+  if (lastPosted !== todayDate()) return true;
+  return product.lastGroupPostSignature !== postSignature(product);
+}
+
 function parseDateMs(value) {
   if (!value) return null;
   const time = Date.parse(value);
@@ -76,11 +99,20 @@ function compareBestOffers(a, b) {
 
 function groupTopOffers(products, limitPerPlatform = 5) {
   const groups = new Map();
+  const skipped = [];
 
   for (const product of products.filter((item) => isPublicProduct(item))) {
+    if (!canPostToday(product)) {
+      skipped.push(product.id);
+      continue;
+    }
     const platform = product.platform || "Oferta";
     if (!groups.has(platform)) groups.set(platform, []);
     groups.get(platform).push(product);
+  }
+
+  if (skipped.length) {
+    console.log(`Pulado(s) por ja postado hoje: ${skipped.join(", ")}`);
   }
 
   return Array.from(groups.entries())

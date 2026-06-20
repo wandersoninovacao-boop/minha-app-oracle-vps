@@ -3,3 +3,5 @@ node_modules/
 npm-debug.log
 .superpowers/
 out/
+.wwebjs_auth/
+.wwebjs_cache/
