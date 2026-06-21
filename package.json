@@ -15,13 +15,10 @@
     "aliexpress:check": "node scripts/send-group-top5.js --dry-run --queue=aliexpress-grupo3.json --chat-env=ALIEXPRESS_TELEGRAM_CHAT_ID --expected=3",
     "aliexpress:send": "npm run aliexpress:check && node scripts/send-group-top5.js --queue=aliexpress-grupo3.json --chat-env=ALIEXPRESS_TELEGRAM_CHAT_ID --expected=3",
     "groups:send": "npm run groups:check && node scripts/send-group-top5.js && npm run aliexpress:send",
-    "whatsapp:qr": "node scripts/send-whatsapp.js --qr",
-    "whatsapp:send-aliexpress": "node scripts/send-whatsapp.js --send --queue=aliexpress-grupo3.json"
+    "whatsapp:check-aliexpress": "node scripts/send-whatsapp-waha.js --dry-run",
+    "whatsapp:send-aliexpress": "npm run whatsapp:check-aliexpress && node scripts/send-whatsapp-waha.js"
   },
   "dependencies": {
     "puppeteer-core": "^25.1.0"
-  },
-  "devDependencies": {
-    "whatsapp-web.js": "^1.26.0"
   }
 }
